@@ -1,6 +1,17 @@
-import { Box, Flex, Heading, HStack, Text, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  HStack,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import SignUpModal from "./ui/auth/signUpModal/SignUpModal";
 import SignInModal from "./ui/auth/signInModal/SignInModal";
+import { LiaSignInAltSolid } from "react-icons/lia";
+import Link from "next/link";
+import { MdStart } from "react-icons/md";
 
 export default function Page() {
   const mainStyle = {
@@ -13,6 +24,16 @@ export default function Page() {
     paddingInline: "2rem",
     justifyContent: "space-between",
     alignItems: "center",
+  };
+  const btnStyle = {
+    bgColor: "#044F63",
+    color: "#fff",
+    _hover: { bg: "#55c2da" },
+    cursor: "pointer",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    columnGap: 2,
   };
 
   return (
@@ -59,8 +80,16 @@ export default function Page() {
           online platform.
         </Heading>
         <HStack spacing={5}>
-          <SignInModal />
-          <SignUpModal />
+          <Link href={"/auth/account-type"}>
+            <Button sx={btnStyle} size={{ base: "sm", md: "md" }}>
+              Sign In <LiaSignInAltSolid size={20} />
+            </Button>
+          </Link>
+          <Link href={"/auth/register"}>
+            <Button sx={btnStyle} size={{ base: "sm", md: "md" }}>
+              Sign Up <MdStart size={20} />
+            </Button>
+          </Link>
         </HStack>
       </VStack>
     </Box>
