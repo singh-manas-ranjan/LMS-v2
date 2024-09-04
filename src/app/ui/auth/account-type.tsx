@@ -20,7 +20,7 @@ export const AccountType = () => {
         marginInline={"auto"}
         rounded={"md"}
         shadow={"md"}
-        bg="rgba(225, 225, 225, 1)"
+        bg="rgba(225, 225, 225, .9)"
         display={"flex"}
         justifyContent={"center"}
         alignItems={"center"}
@@ -34,7 +34,7 @@ export const AccountType = () => {
           w={90}
           h={90}
           position={"absolute"}
-          top={-12}
+          top={"-50px"}
           bgImage={"/student.png"}
           bgSize={"cover"}
           bgRepeat={"no-repeat"}
@@ -60,7 +60,7 @@ export const AccountType = () => {
         marginInline={"auto"}
         rounded={"md"}
         shadow={"md"}
-        bg="rgba(225, 225, 225, 1)"
+        bg="rgba(225, 225, 225, .9)"
         display={"flex"}
         justifyContent={"center"}
         alignItems={"center"}
@@ -74,7 +74,7 @@ export const AccountType = () => {
           w={90}
           h={90}
           position={"absolute"}
-          top={-12}
+          top={"-50px"}
           bgImage={"/instructor1.png"}
           bgSize={"cover"}
           bgRepeat={"no-repeat"}

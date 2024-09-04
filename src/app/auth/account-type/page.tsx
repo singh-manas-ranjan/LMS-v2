@@ -1,5 +1,4 @@
 import { AccountType } from "@/app/ui/auth/account-type";
-import { LoginForm } from "@/app/ui/auth/login-form";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import Link from "next/link";
 
@@ -20,11 +19,8 @@ const LoginPage = () => {
             padding={"1rem"}
             color={"#044F63"}
             position={"absolute"}
-            pl={"2rem"}
+            pl={"1rem"}
             top={"0"}
-            left={"0"}
-            right={"0"}
-            boxShadow={"0 2px 2px -2px gray"}
           >
             Learnopia
           </Text>
@@ -36,8 +32,7 @@ const LoginPage = () => {
         bgRepeat={"no-repeat"}
         bgPosition={"center"}
         w={"100%"}
-        h={"92dvh"}
-        mt={"3rem"}
+        h={"100dvh"}
       >
         <Box
           w={"100%"}
@@ -45,7 +40,7 @@ const LoginPage = () => {
           display={"flex"}
           justifyContent={"center"}
           alignItems={"center"}
-          bg="rgba(0, 0, 0, 0.4)"
+          bg="rgba(0, 0, 0, 0.5)"
           p={5}
         >
           <AccountType />

@@ -1,8 +1,6 @@
 import { LoginForm } from "@/app/ui/auth/login-form";
-import { NewPasswordForm } from "@/app/ui/auth/new-password-form";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import Link from "next/link";
-import { Suspense } from "react";
 
 const navStyle = {
   w: "100%",
@@ -21,11 +19,8 @@ const LoginPage = () => {
             padding={"1rem"}
             color={"#044F63"}
             position={"absolute"}
-            pl={"2rem"}
+            pl={"1rem"}
             top={"0"}
-            left={"0"}
-            right={"0"}
-            boxShadow={"0 2px 2px -2px gray"}
           >
             Learnopia
           </Text>

@@ -81,12 +81,12 @@ export default function Page() {
         </Heading>
         <HStack spacing={5}>
           <Link href={"/auth/account-type"}>
-            <Button sx={btnStyle} size={{ base: "sm", md: "md" }}>
+            <Button sx={btnStyle} size={{ base: "sm", md: "md" }} rounded={4}>
               Sign In <LiaSignInAltSolid size={20} />
             </Button>
           </Link>
           <Link href={"/auth/register"}>
-            <Button sx={btnStyle} size={{ base: "sm", md: "md" }}>
+            <Button sx={btnStyle} size={{ base: "sm", md: "md" }} rounded={4}>
               Sign Up <MdStart size={20} />
             </Button>
           </Link>

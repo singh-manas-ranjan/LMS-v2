@@ -299,7 +299,7 @@ export const RegisterForm = () => {
 
           <Box display={"flex"} justifyContent={"center"} w={"100%"}>
             <Link
-              href={"/auth/login"}
+              href={"/auth/account-type"}
               style={{ color: "#0275d8", fontSize: ".8rem" }}
             >
               Already have an account?
