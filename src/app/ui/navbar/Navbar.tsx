@@ -31,6 +31,7 @@ import { TCourse } from "../../../../public/courses";
 import { fetchAllCourses } from "@/actions/courses/actions";
 import { addCourses } from "@/lib/features/courses/coursesSlice";
 import axios, { AxiosError } from "axios";
+import { logout } from "@/actions/auth/logout";
 
 const nav = {
   bg: "#fff",
@@ -207,57 +208,58 @@ const Navbar = ({ navLinks }: Props) => {
   };
 
   const handleSignOut = async () => {
-    try {
-      await axios.post(
-        `http://localhost:3131/api/v1/${roleModelMap[userInfo.role]}/logout`,
-        {},
-        {
-          withCredentials: true,
-        }
-      );
-      router.push("/");
-      setTimeout(() => {
-        showToastMessage(
-          "Logged out successfully",
-          "success",
-          "Come back soon!"
-        );
-      }, 500);
-      removeUserInfoFromLocalStorage();
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const axiosError = error as AxiosError;
-        if (axiosError.response && axiosError.response?.status === 401) {
-          try {
-            await refreshToken();
-            await axios.post(
-              `http://localhost:3131/api/v1/${
-                roleModelMap[userInfo.role]
-              }/logout`,
-              {},
-              {
-                withCredentials: true,
-              }
-            );
-            router.push("/");
-            setTimeout(() => {
-              showToastMessage(
-                "Logged out successfully",
-                "success",
-                "Come back soon!"
-              );
-            }, 500);
-          } catch (logoutError) {
-            showToastMessage("Unable to logout", "error");
-          } finally {
-            removeUserInfoFromLocalStorage();
-          }
-        }
-      } else {
-        showToastMessage("Unexpected error occurred", "error");
-        removeUserInfoFromLocalStorage();
-      }
-    }
+    logout();
+    // try {
+    //   await axios.post(
+    //     `http://localhost:3131/api/v1/${roleModelMap[userInfo.role]}/logout`,
+    //     {},
+    //     {
+    //       withCredentials: true,
+    //     }
+    //   );
+    //   router.push("/");
+    //   setTimeout(() => {
+    //     showToastMessage(
+    //       "Logged out successfully",
+    //       "success",
+    //       "Come back soon!"
+    //     );
+    //   }, 500);
+    //   removeUserInfoFromLocalStorage();
+    // } catch (error) {
+    //   if (axios.isAxiosError(error)) {
+    //     const axiosError = error as AxiosError;
+    //     if (axiosError.response && axiosError.response?.status === 401) {
+    //       try {
+    //         await refreshToken();
+    //         await axios.post(
+    //           `http://localhost:3131/api/v1/${
+    //             roleModelMap[userInfo.role]
+    //           }/logout`,
+    //           {},
+    //           {
+    //             withCredentials: true,
+    //           }
+    //         );
+    //         router.push("/");
+    //         setTimeout(() => {
+    //           showToastMessage(
+    //             "Logged out successfully",
+    //             "success",
+    //             "Come back soon!"
+    //           );
+    //         }, 500);
+    //       } catch (logoutError) {
+    //         showToastMessage("Unable to logout", "error");
+    //       } finally {
+    //         removeUserInfoFromLocalStorage();
+    //       }
+    //     }
+    //   } else {
+    //     showToastMessage("Unexpected error occurred", "error");
+    //     removeUserInfoFromLocalStorage();
+    //   }
+    // }
   };
 
   const handleClick = () => {
@@ -308,21 +310,24 @@ const Navbar = ({ navLinks }: Props) => {
               padding: "0",
             }}
           >
-            <MenuItem
-              style={{
-                padding: "0",
-              }}
-              onClick={() => handleSignOut()}
-            >
-              <Text
-                textAlign={"center"}
-                sx={link}
-                fontSize={{ base: "xs", sm: "sm" }}
+            <form action={() => logout()}>
+              <MenuItem
+                style={{
+                  padding: "0",
+                }}
+                // onClick={() => handleSignOut()}
               >
-                <TbLogout2 />
-                Logout
-              </Text>
-            </MenuItem>
+                <Button
+                  textAlign={"center"}
+                  sx={link}
+                  fontSize={{ base: "xs", sm: "sm" }}
+                  type="submit"
+                >
+                  <TbLogout2 />
+                  Logout
+                </Button>
+              </MenuItem>
+            </form>
           </MenuList>
         </Menu>
       </Flex>

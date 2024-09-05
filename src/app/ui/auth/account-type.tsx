@@ -7,9 +7,9 @@ export const AccountType = () => {
   return (
     <Box
       display={"flex"}
-      flexDir={{ base: "column", md: "row" }}
-      rowGap={5}
-      columnGap={{ base: 5, md: 10 }}
+      flexDir={{ base: "column", sm: "row" }}
+      rowGap={20}
+      columnGap={{ base: 5, sm: 10 }}
     >
       <Box
         flex={1}

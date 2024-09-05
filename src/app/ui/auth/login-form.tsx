@@ -21,11 +21,16 @@ import Link from "next/link";
 import { FormSuccess } from "./form-success";
 import { FormError } from "./form-error";
 import { LockKeyholeIcon, User } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { login } from "@/actions/auth/login";
 
 export const LoginForm = () => {
+  const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
+
+  const callbackUrl = searchParams.get("callbackUrl");
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -39,18 +44,22 @@ export const LoginForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = form;
 
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
     setError("");
     setSuccess("");
-    startTransition(() => {});
-  };
-
-  const errorMsg = {
-    color: "red",
-    fontSize: { base: "xs", lg: "sm" },
+    startTransition(() => {
+      login(values, callbackUrl).then((data) => {
+        if (data?.error) {
+          form.reset();
+          setError(data?.error);
+        } else {
+          form.reset();
+          setSuccess(data?.success);
+        }
+      });
+    });
   };
 
   return (
@@ -80,7 +89,6 @@ export const LoginForm = () => {
                 <User size={15} color="grey" />
               </InputLeftElement>
               <Input
-                id="username"
                 type="text"
                 placeholder="Username"
                 {...form.register("username")}
@@ -88,6 +96,7 @@ export const LoginForm = () => {
                 fontSize={{ base: ".8rem", lg: "md" }}
                 bg={"white"}
                 rounded={"4"}
+                disabled={isPending}
               />
             </InputGroup>
             <FormErrorMessage fontSize={".8rem"}>
@@ -100,7 +109,6 @@ export const LoginForm = () => {
                 <LockKeyholeIcon size={15} color="grey" />
               </InputLeftElement>
               <Input
-                id="password"
                 type="password"
                 placeholder="Password"
                 {...register("password")}
@@ -108,6 +116,8 @@ export const LoginForm = () => {
                 fontSize={{ base: ".8rem", lg: "md" }}
                 bg={"white"}
                 rounded={"4"}
+                disabled={isPending}
+                autoComplete="current-password"
               />
             </InputGroup>
             <FormErrorMessage fontSize={".8rem"}>

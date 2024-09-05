@@ -1,6 +1,6 @@
 import NextAuth, { type DefaultSession } from "next-auth";
-import { TUser } from "./app/ui/navbar/Navbar";
 import authConfig from "./auth.config";
+import { TUser } from "./app/ui/navbar/Navbar";
 
 enum UserRole {
   STUDENT = "student",
@@ -25,32 +25,25 @@ export const {
   pages: {
     signIn: "/auth/login",
   },
-  events: {
-    async linkAccount({ user }) {},
-  },
+  // events: {
+  //   async linkAccount({ user }) {},
+  // },
   callbacks: {
-    async signIn({ user, account }) {
-      return true;
-    },
-
-    async session({ session, token }) {
-      console.log({ SessionToken: token });
-      if (token.sub && session.user) {
-        session.user.id = token.sub;
-      }
-      if (token.role && session.user) {
-        session.user.role = token.role as UserRole;
-      }
-
-      return session;
-    },
-    async jwt({ token }) {
+    // async signIn({ user, account }) {
+    //   return true;
+    // },
+    // async session({ session, token }) {
+    //   console.log({ SessionToken: token });
+    // if (token.sub && session.user) {
+    //   session.user.id = token.sub;
+    // }
+    // if (token.role && session.user) {
+    //   session.user.role = token.role as UserRole;
+    // }
+    //   return session;
+    // },
+    async jwt({ token, user, profile }) {
       console.log({ JWTToken: token });
-      if (!token.sub) return token;
-
-      const existingUser = {} as TUser;
-      if (!existingUser) return token;
-      token.role = existingUser.role;
       return token;
     },
   },
