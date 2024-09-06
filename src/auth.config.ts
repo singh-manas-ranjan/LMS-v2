@@ -16,26 +16,47 @@ export default {
     }),
     Credentials({
       async authorize(credentials) {
-        const validatedFields = LoginSchema.safeParse(credentials);
-
-        if (validatedFields.success) {
-          const { username, password } = validatedFields.data;
-          const user = await fetch("http://localhost:3131/api/v1/users/login", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ username, password }),
-          })
-            .then((res) => res.json())
-            .then((data) => data.body);
-
-          if (!user || !user.password) {
+        try {
+          // Validate credentials
+          const validatedFields = LoginSchema.safeParse(credentials);
+          if (!validatedFields.success) {
+            console.error("Invalid credentials:", validatedFields.error);
             return null;
           }
+
+          const { username, password } = validatedFields.data;
+
+          // Make request to your API
+          const response = await fetch(
+            "http://localhost:3131/api/v1/users/login",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ username, password }),
+            }
+          );
+
+          if (!response.ok) {
+            console.error("Failed to fetch user:", response.statusText);
+            return null;
+          }
+
+          const data = await response.json();
+          const user = data.body;
+
+          // Check user validity
+          if (!user || !user.password) {
+            console.error("Invalid user data:", user);
+            return null;
+          }
+
           return user;
+        } catch (error) {
+          console.error("Authorization error:", error);
+          return null;
         }
-        return null;
       },
     }),
   ],

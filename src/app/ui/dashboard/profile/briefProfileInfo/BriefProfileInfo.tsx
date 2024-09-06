@@ -1,15 +1,12 @@
-"use client";
-import React, { useEffect, useState } from "react";
+import { auth } from "@/auth";
 import { Box, Grid, Heading, Image } from "@chakra-ui/react";
-import { getUserInfoFromLocalStorage, TUser } from "../../../navbar/Navbar";
 
-const BriefProfileInfo = ({ children }: { children: React.ReactNode }) => {
-  const [userInfo, setUserInfo] = useState<TUser>({} as TUser);
-
-  useEffect(() => {
-    setUserInfo((prev) => (prev = getUserInfoFromLocalStorage()));
-  }, [userInfo.avatar]);
-
+const BriefProfileInfo = async ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const session = await auth();
   return (
     <Box
       p={".3rem"}
@@ -42,7 +39,7 @@ const BriefProfileInfo = ({ children }: { children: React.ReactNode }) => {
           <Image
             loading="lazy"
             alt="profile-pic"
-            src={userInfo.avatar ?? "/avatar.svg"}
+            src={session?.user.avatar ?? "/avatar.svg"}
             width={100}
             height={100}
             style={{
@@ -55,7 +52,9 @@ const BriefProfileInfo = ({ children }: { children: React.ReactNode }) => {
         </Box>
         <Grid textAlign={"center"} rowGap={2} color={"#364A63"}>
           <Heading fontSize={{ base: "sm", lg: "md" }}>
-            {userInfo ? `${userInfo.firstName} ${userInfo.lastName}` : ""}
+            {session?.user
+              ? `${session?.user.firstName} ${session?.user.lastName}`
+              : ""}
           </Heading>
           <Heading fontSize={{ base: ".8rem", lg: "sm" }}>
             {" "}
@@ -70,4 +69,4 @@ const BriefProfileInfo = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default React.memo(BriefProfileInfo);
+export default BriefProfileInfo;

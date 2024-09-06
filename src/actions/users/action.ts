@@ -27,5 +27,15 @@ const getUserByEmail = async (email: string, accountType: string) => {
     return null;
   }
 };
+const getUserInfoByEmail = async (email: string) => {
+  try {
+    return await axios
+      .post(`http://localhost:3131/api/v1/users/info`, { email })
+      .then((res) => res.data.body);
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
 
-export { fetchAllUsers, getUserByEmail };
+export { fetchAllUsers, getUserByEmail, getUserInfoByEmail };

@@ -1,4 +1,5 @@
-import { Box, Heading } from "@chakra-ui/react";
+import { auth, signOut } from "@/auth";
+import { Box, Button, Heading } from "@chakra-ui/react";
 import React from "react";
 
 const main = {
@@ -11,10 +12,13 @@ const main = {
   padding: "1rem",
   overflow: "hidden",
 };
-const Settings = () => {
+const Settings = async () => {
+  const session = await auth();
   return (
-    <Box as="main" sx={main}>
-      <Heading>Settings</Heading>
+    <Box sx={main}>
+      <Heading as="h1" size="md">
+        Settings
+      </Heading>
     </Box>
   );
 };

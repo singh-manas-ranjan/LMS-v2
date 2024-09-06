@@ -14,7 +14,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { IoIosNotifications } from "react-icons/io";
 import { TbLogout2 } from "react-icons/tb";
 import { FaHandsClapping } from "react-icons/fa6";
@@ -25,13 +25,12 @@ import NextLink from "next/link";
 import styles from "./Navbar.module.css";
 import { TSideBarLinks } from "../dashboard/sidebar/Sidebar";
 import { openMenuClick } from "@/lib/features/sideBar/sideBarSlice";
-import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/lib/store";
 import { TCourse } from "../../../../public/courses";
 import { fetchAllCourses } from "@/actions/courses/actions";
 import { addCourses } from "@/lib/features/courses/coursesSlice";
-import axios, { AxiosError } from "axios";
 import { logout } from "@/actions/auth/logout";
+import { useSession } from "next-auth/react";
 
 const nav = {
   bg: "#fff",
@@ -85,6 +84,8 @@ const rightNav = {
 
 interface Props {
   navLinks: TSideBarLinks;
+  avatar: string;
+  firstName: string;
 }
 
 export type TAddress = {
@@ -125,6 +126,7 @@ export type TUser = {
   role: string;
   avatar: string;
   aboutMe?: string;
+  password?: string;
   domain?: string;
   address?: TAddress;
   services?: string[];
@@ -154,30 +156,14 @@ export function removeUserInfoFromLocalStorage() {
   localStorage.removeItem("enrolledCoursesList");
 }
 
-export const refreshToken = async () => {
-  try {
-    const response = await axios.post(
-      `http://localhost:3131/api/v1/refresh-token`,
-      {},
-      { withCredentials: true }
-    );
-    return response.data.body;
-  } catch (error) {
-    throw new Error("Failed to refresh token");
-  }
-};
-
-const Navbar = ({ navLinks }: Props) => {
+const Navbar = ({ navLinks, avatar, firstName }: Props) => {
   const pathname = usePathname();
-  const router = useRouter();
   const dispatch = useAppDispatch();
   const [minWidth600] = useMediaQuery("(min-width: 600px)");
   const [maxWidth481] = useMediaQuery("(max-width: 481px)");
   const isMenuOpen = useAppSelector((state) => state.sideBar.isOpen);
 
-  const [userInfo, setUserInfo] = useState<TUser>({} as TUser);
   useEffect(() => {
-    setUserInfo((prev) => (prev = getUserInfoFromLocalStorage()));
     async function getAllCourses() {
       const response: TCourse[] = await fetchAllCourses();
       dispatch(addCourses(response));
@@ -201,65 +187,9 @@ const Navbar = ({ navLinks }: Props) => {
     });
   }
 
-  const roleModelMap: { [key: string]: any } = {
-    student: "students",
-    instructor: "instructors",
-    admin: "admin",
-  };
-
   const handleSignOut = async () => {
     logout();
-    // try {
-    //   await axios.post(
-    //     `http://localhost:3131/api/v1/${roleModelMap[userInfo.role]}/logout`,
-    //     {},
-    //     {
-    //       withCredentials: true,
-    //     }
-    //   );
-    //   router.push("/");
-    //   setTimeout(() => {
-    //     showToastMessage(
-    //       "Logged out successfully",
-    //       "success",
-    //       "Come back soon!"
-    //     );
-    //   }, 500);
-    //   removeUserInfoFromLocalStorage();
-    // } catch (error) {
-    //   if (axios.isAxiosError(error)) {
-    //     const axiosError = error as AxiosError;
-    //     if (axiosError.response && axiosError.response?.status === 401) {
-    //       try {
-    //         await refreshToken();
-    //         await axios.post(
-    //           `http://localhost:3131/api/v1/${
-    //             roleModelMap[userInfo.role]
-    //           }/logout`,
-    //           {},
-    //           {
-    //             withCredentials: true,
-    //           }
-    //         );
-    //         router.push("/");
-    //         setTimeout(() => {
-    //           showToastMessage(
-    //             "Logged out successfully",
-    //             "success",
-    //             "Come back soon!"
-    //           );
-    //         }, 500);
-    //       } catch (logoutError) {
-    //         showToastMessage("Unable to logout", "error");
-    //       } finally {
-    //         removeUserInfoFromLocalStorage();
-    //       }
-    //     }
-    //   } else {
-    //     showToastMessage("Unexpected error occurred", "error");
-    //     removeUserInfoFromLocalStorage();
-    //   }
-    // }
+    showToastMessage("Logged out successfully", "success", "Come back soon!");
   };
 
   const handleClick = () => {
@@ -296,13 +226,13 @@ const Navbar = ({ navLinks }: Props) => {
           >
             <Box sx={profile}>
               <Image
-                src={userInfo.avatar ?? "/avatar.svg"}
+                src={avatar ?? "/avatar.svg"}
                 width={30}
                 height={30}
                 style={{ borderRadius: "2px" }}
                 alt=""
               />{" "}
-              {minWidth600 && <Text>{userInfo.firstName}</Text>}
+              {minWidth600 && <Text>{firstName}</Text>}
             </Box>
           </MenuButton>
           <MenuList
@@ -310,24 +240,21 @@ const Navbar = ({ navLinks }: Props) => {
               padding: "0",
             }}
           >
-            <form action={() => logout()}>
-              <MenuItem
-                style={{
-                  padding: "0",
-                }}
-                // onClick={() => handleSignOut()}
+            <MenuItem
+              style={{
+                padding: "0",
+              }}
+              onClick={() => handleSignOut()}
+            >
+              <Text
+                textAlign={"center"}
+                sx={link}
+                fontSize={{ base: "xs", sm: "sm" }}
               >
-                <Button
-                  textAlign={"center"}
-                  sx={link}
-                  fontSize={{ base: "xs", sm: "sm" }}
-                  type="submit"
-                >
-                  <TbLogout2 />
-                  Logout
-                </Button>
-              </MenuItem>
-            </form>
+                <TbLogout2 />
+                Logout
+              </Text>
+            </MenuItem>
           </MenuList>
         </Menu>
       </Flex>
@@ -377,4 +304,4 @@ const Navbar = ({ navLinks }: Props) => {
   );
 };
 
-export default Navbar;
+export default React.memo(Navbar);

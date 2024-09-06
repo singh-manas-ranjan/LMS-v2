@@ -1,44 +1,18 @@
-"use client";
 import React, { useEffect, useState } from "react";
 import { Box, Heading, SimpleGrid, Spinner } from "@chakra-ui/react";
 import MyCoursesCard from "./myCoursesCard/MyCoursesCard";
 import { getEnrolledCourses } from "@/actions/enrolledCourses/action";
 import { TCourse } from "../../../../../public/courses";
 import { getUserInfoFromLocalStorage } from "../../navbar/Navbar";
+import { auth } from "@/auth";
+import axios from "axios";
 
-const EnrolledCourses = () => {
-  const [eCourses, setECourses] = useState<TCourse[]>([]);
-  const [loading, setLoading] = useState(true);
+const EnrolledCourses = async () => {
+  const session = await auth();
 
-  useEffect(() => {
-    async function fetchEnrolledCourses() {
-      try {
-        const { _id } = getUserInfoFromLocalStorage();
-        const courses = await getEnrolledCourses(_id || "");
-        setECourses(courses);
-        localStorage.setItem("enrolledCoursesList", JSON.stringify(courses));
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-      }
-    }
-
-    fetchEnrolledCourses();
-  }, []);
-
-  if (loading) {
-    return (
-      <Box w={"100%"} h={"100%"} display={"grid"} placeItems={"center"}>
-        <Spinner
-          thickness="4px"
-          speed="0.65s"
-          color="blue.500"
-          emptyColor="gray.200"
-          size="xl"
-        />
-      </Box>
-    );
-  }
+  const eCourses: TCourse[] = await axios
+    .get(`http://localhost:3131/api/v1/students/courses/${session?.user.id}`)
+    .then((res) => res.data.body);
 
   return (
     <Box w={"100%"} h={"100%"}>

@@ -35,11 +35,13 @@ const PersonalInfo = ({ userData }: Props) => {
           display={"flex"}
           width={"100%"}
           justifyContent={"space-between"}
-          alignItems={"center"}
+          alignItems={{ md: "center" }}
+          flexDir={{ base: "column", sm: "row" }}
+          rowGap={1}
         >
           <Heading
-            fontSize={{ base: ".8rem", sm: "sm" }}
-            width={{ base: "45%", lg: "20%" }}
+            fontSize={{ base: "sm" }}
+            width={{ base: "30%", lg: "20%" }}
             display={"flex"}
             justifyContent={"space-between"}
             alignItems={"center"}
@@ -49,23 +51,26 @@ const PersonalInfo = ({ userData }: Props) => {
               .charAt(0)
               .toUpperCase()
               .concat(key.substring(1).toLocaleLowerCase())} `}{" "}
-            <span>:</span>
+            <Text display={{ base: "none", sm: "inline" }}>:</Text>
           </Heading>
-          <Text
-            fontSize={{
-              base: ".7rem",
-              sm: ".8rem",
-              lg: "sm",
-            }}
-            width={{ base: "50%", lg: "70%" }}
+          <Box
+            width={{ base: "65%", lg: "70%" }}
             display={"flex"}
             alignItems={"center"}
             color={"#364A63"}
+            flexWrap={"wrap"}
           >
-            {typeof value === "object" && value !== null
-              ? `${value.addressLine1}, ${value.addressLine2}, ${value.state}, ${value.country}`
-              : value}
-          </Text>
+            <Text
+              fontSize={{
+                base: ".8rem",
+                lg: "sm",
+              }}
+            >
+              {typeof value === "object" && value !== null
+                ? `${value.addressLine1}, ${value.addressLine2}, ${value.state}, ${value.country}`
+                : value}
+            </Text>
+          </Box>
         </Box>
       ))}
     </Flex>

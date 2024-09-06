@@ -12,43 +12,35 @@ import {
 import axios from "axios";
 import React from "react";
 import { FaCameraRetro } from "react-icons/fa";
-import {
-  getUserInfoFromLocalStorage,
-  removeUserInfoFromLocalStorage,
-  TUser,
-} from "../../navbar/Navbar";
-
+import { useSession } from "next-auth/react";
 const UploadProfilePicBtn = ({
   user,
 }: {
   user: "STUDENTS" | "INSTRUCTORS";
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
+  const { data: session, update } = useSession();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { _id } = getUserInfoFromLocalStorage();
-    const formData = new FormData(e.currentTarget);
-    try {
-      const response: TUser = await axios
-        .patch(
-          `http://localhost:3131/api/v1/${user.toLowerCase()}/avatar/${_id}`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        )
-        .then((res) => res.data.body)
-        .catch((err) => console.log(err));
-      removeUserInfoFromLocalStorage();
-      localStorage.setItem("userInfo", JSON.stringify(response));
-      onClose();
-      window?.location.reload();
-    } catch (error) {
-      console.error("Failed to upload profile picture:", error);
-    }
+    // const formData = new FormData(e.currentTarget);
+    // formData.append("id", session.user.id);
+
+    // try {
+    //   const response = await axios.patch(
+    //     `http://localhost:3131/api/v1/${user.toLowerCase()}/avatar`,
+    //     {
+    //       formData,
+    //     },
+    //     {
+    //       headers: {
+    //         "Content-Type": "multipart/form-data",
+    //       },
+    //     }
+    //   );
+    //   onClose();
+    // } catch (error) {
+    //   console.error("Failed to upload profile picture:", error);
+    // }
   };
 
   return (

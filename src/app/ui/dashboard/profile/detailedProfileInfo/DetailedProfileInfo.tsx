@@ -1,40 +1,30 @@
-"use client";
 import {
   Box,
   Divider,
   Flex,
   Heading,
-  Skeleton,
-  Stack,
   Tab,
   TabList,
   TabPanel,
   TabPanels,
   Tabs,
-  Text,
 } from "@chakra-ui/react";
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import socialLinksData from "../../../../../../public/socialLinksData";
 import UpdatePassword from "../UpdatePassword";
 import SocialLinks from "../socialLinks/SocialLinks";
 import TextEditor from "../textEditor/TextEditor";
 import { sxScrollbar } from "../../../../../../public/scrollbarStyle";
 import PersonalInfo from "./PersonalInfo";
-import {
-  getUserInfoFromLocalStorage,
-  TAddress,
-  TUser,
-} from "../../../navbar/Navbar";
-import EditPersonalInfo from "../editPersonalInfo/EditPersonalInfo";
+import { TAddress } from "../../../navbar/Navbar";
+import { auth } from "@/auth";
 
 export type TUserInfo = {
-  _id: string;
   firstName: string;
   lastName: string;
   email: string;
   phone: string;
   gender: string;
-  qualification: string;
   address: TAddress;
 };
 
@@ -51,57 +41,18 @@ const getGender = (gender: string): string => {
   }
 };
 
-const getQualification = (qualification: string): string => {
-  switch (qualification) {
-    case "X":
-      return "Secondary";
-    case "XII":
-      return "Senior Secondary";
-    case "UG":
-      return "Under-Graduate";
-    case "PG":
-      return "Post-Graduate";
-    default:
-      return "-NA-";
-  }
-};
+const DetailedProfileInfo = async () => {
+  const session = await auth();
 
-const DetailedProfileInfo = () => {
-  const [userInfo, setUserInfo] = useState<TUserInfo>();
-  const [user, setUser] = useState<TUser>({} as TUser);
+  const userInfo: TUserInfo = {
+    firstName: session?.user.firstName,
+    lastName: session?.user.lastName,
+    email: session?.user.email,
+    phone: session?.user.phone,
+    gender: getGender(session?.user.gender!),
+    address: session?.user.address,
+  } as TUserInfo;
 
-  useEffect(() => {
-    const info = getUserInfoFromLocalStorage();
-    setUser(info);
-    const {
-      firstName,
-      lastName,
-      email,
-      phone,
-      gender,
-      qualification,
-      address,
-    } = info;
-    setUserInfo({
-      firstName,
-      lastName,
-      email,
-      phone,
-      gender: getGender(gender),
-      qualification: getQualification(qualification),
-      address,
-    } as TUserInfo);
-  }, []);
-
-  const handleNewUserInfo = useCallback((newUserInfo: TUser) => {
-    console.log(newUserInfo);
-
-    setUserInfo({
-      ...newUserInfo,
-      gender: getGender(newUserInfo["gender"]),
-      qualification: getQualification(newUserInfo["qualification"]),
-    } as TUserInfo);
-  }, []);
   return (
     <Tabs w={"100%"} h={"100%"}>
       <TabList color={"#364A63"}>
@@ -160,11 +111,11 @@ const DetailedProfileInfo = () => {
                   <Heading fontSize={{ base: "md" }} color={"#364A63"}>
                     Personal Information
                   </Heading>
-                  <EditPersonalInfo
+                  {/* <EditPersonalInfo
                     userId={user._id ?? ""}
                     userInfo={user}
                     handleUpdateUserInfo={handleNewUserInfo}
-                  />
+                  /> */}
                 </Box>
                 <Divider marginBlock={2} orientation="horizontal" />
                 <PersonalInfo userData={userInfo} />
@@ -198,4 +149,4 @@ const DetailedProfileInfo = () => {
   );
 };
 
-export default React.memo(DetailedProfileInfo);
+export default DetailedProfileInfo;
