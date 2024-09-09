@@ -4,14 +4,14 @@ import MyCoursesCard from "./myCoursesCard/MyCoursesCard";
 import { getEnrolledCourses } from "@/actions/enrolledCourses/action";
 import { TCourse } from "../../../../../public/courses";
 import { getUserInfoFromLocalStorage } from "../../navbar/Navbar";
-import { auth } from "@/auth";
 import axios from "axios";
+import { currentUser } from "@/lib/auth-session";
 
 const EnrolledCourses = async () => {
-  const session = await auth();
+  const user = await currentUser();
 
   const eCourses: TCourse[] = await axios
-    .get(`http://localhost:3131/api/v1/students/courses/${session?.user.id}`)
+    .get(`http://localhost:3131/api/v1/students/courses/${user?.id}`)
     .then((res) => res.data.body);
 
   return (

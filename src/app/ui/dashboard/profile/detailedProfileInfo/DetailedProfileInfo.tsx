@@ -16,8 +16,9 @@ import SocialLinks from "../socialLinks/SocialLinks";
 import TextEditor from "../textEditor/TextEditor";
 import { sxScrollbar } from "../../../../../../public/scrollbarStyle";
 import PersonalInfo from "./PersonalInfo";
-import { TAddress } from "../../../navbar/Navbar";
-import { auth } from "@/auth";
+import { TAddress, TUser } from "../../../navbar/Navbar";
+import { currentUser } from "@/lib/auth-session";
+import EditPersonalInfo from "../editPersonalInfo/EditPersonalInfo";
 
 export type TUserInfo = {
   firstName: string;
@@ -42,15 +43,15 @@ const getGender = (gender: string): string => {
 };
 
 const DetailedProfileInfo = async () => {
-  const session = await auth();
+  const user = await currentUser();
 
   const userInfo: TUserInfo = {
-    firstName: session?.user.firstName,
-    lastName: session?.user.lastName,
-    email: session?.user.email,
-    phone: session?.user.phone,
-    gender: getGender(session?.user.gender!),
-    address: session?.user.address,
+    firstName: user?.firstName,
+    lastName: user?.lastName,
+    email: user?.email,
+    phone: user?.phone,
+    gender: getGender(user?.gender!),
+    address: user?.address,
   } as TUserInfo;
 
   return (
@@ -111,11 +112,18 @@ const DetailedProfileInfo = async () => {
                   <Heading fontSize={{ base: "md" }} color={"#364A63"}>
                     Personal Information
                   </Heading>
-                  {/* <EditPersonalInfo
-                    userId={user._id ?? ""}
-                    userInfo={user}
-                    handleUpdateUserInfo={handleNewUserInfo}
-                  /> */}
+                  <EditPersonalInfo
+                    userId={user?.id as string}
+                    userInfo={{
+                      firstName: user?.firstName as string,
+                      lastName: user?.lastName as string,
+                      email: user?.email as string,
+                      phone: user?.phone as string,
+                      gender: user?.gender as string,
+                      address: user?.address as TAddress,
+                      qualification: user?.qualification as string,
+                    }}
+                  />
                 </Box>
                 <Divider marginBlock={2} orientation="horizontal" />
                 <PersonalInfo userData={userInfo} />

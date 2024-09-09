@@ -117,7 +117,7 @@ export const LoginForm = () => {
                 bg={"white"}
                 rounded={"4"}
                 disabled={isPending}
-                autoComplete="current-password"
+                autoComplete="password"
               />
             </InputGroup>
             <FormErrorMessage fontSize={".8rem"}>

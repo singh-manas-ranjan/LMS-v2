@@ -2,6 +2,7 @@ import EnrolledCourses from "@/app/ui/dashboard/enrolledCoursesContainer/Enrolle
 import { Box } from "@chakra-ui/react";
 import React from "react";
 import { sxScrollbar } from "../../../../../public/scrollbarStyle";
+import WithRoleCheck from "@/app/hoc/WithRoleCheck";
 
 const main = {
   width: "100%",
@@ -24,4 +25,4 @@ const MyCourses = () => {
   );
 };
 
-export default MyCourses;
+export default WithRoleCheck(MyCourses, "student");

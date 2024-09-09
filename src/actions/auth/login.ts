@@ -18,6 +18,7 @@ export const login = async (
     await signIn("credentials", {
       username,
       password,
+      callbackUrl,
       redirectTo: callbackUrl || "/auth/account-type",
     });
     return { success: "Logged in successfully!" };

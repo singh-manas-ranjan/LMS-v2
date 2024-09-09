@@ -1,12 +1,27 @@
-import { auth } from "@/auth";
+import { currentUser } from "@/lib/auth-session";
 import { Box, Grid, Heading, Image } from "@chakra-ui/react";
+
+const getEducation = (education: string): string => {
+  switch (education) {
+    case "X":
+      return "Secondary";
+    case "XII":
+      return "Senior Secondary";
+    case "UG":
+      return "Under-Graduate";
+    case "PG":
+      return "Post-Graduate";
+    default:
+      return "-NA-";
+  }
+};
 
 const BriefProfileInfo = async ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
-  const session = await auth();
+  const user = await currentUser();
   return (
     <Box
       p={".3rem"}
@@ -39,7 +54,7 @@ const BriefProfileInfo = async ({
           <Image
             loading="lazy"
             alt="profile-pic"
-            src={session?.user.avatar ?? "/avatar.svg"}
+            src={user?.avatar ?? "/avatar.svg"}
             width={100}
             height={100}
             style={{
@@ -52,16 +67,14 @@ const BriefProfileInfo = async ({
         </Box>
         <Grid textAlign={"center"} rowGap={2} color={"#364A63"}>
           <Heading fontSize={{ base: "sm", lg: "md" }}>
-            {session?.user
-              ? `${session?.user.firstName} ${session?.user.lastName}`
-              : ""}
+            {user ? `${user?.firstName} ${user?.lastName}` : ""}
           </Heading>
           <Heading fontSize={{ base: ".8rem", lg: "sm" }}>
             {" "}
             Std.ID: <span>3636</span>{" "}
           </Heading>
           <Heading fontSize={{ base: ".8rem", lg: "sm" }}>
-            Post Graduate
+            {user?.qualification ? getEducation(user?.qualification) : "-"}
           </Heading>
         </Grid>
       </Box>

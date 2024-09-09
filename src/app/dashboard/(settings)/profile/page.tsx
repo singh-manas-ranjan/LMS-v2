@@ -4,6 +4,7 @@ import BriefProfileInfo from "@/app/ui/dashboard/profile/briefProfileInfo/BriefP
 import DetailedProfileInfo from "@/app/ui/dashboard/profile/detailedProfileInfo/DetailedProfileInfo";
 import { sxScrollbar } from "../../../../../public/scrollbarStyle";
 import UploadProfilePicBtn from "@/app/ui/dashboard/profile/UploadProfilePicBtn";
+import WithRoleCheck from "@/app/hoc/WithRoleCheck";
 
 const main = {
   width: "100%",
@@ -55,4 +56,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default WithRoleCheck(Profile, "student");

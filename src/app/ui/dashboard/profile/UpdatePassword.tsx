@@ -15,7 +15,6 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { validatePassword } from "../../auth/signUp/SignUpForm";
 import axios, { AxiosError } from "axios";
-import { refreshToken } from "../../navbar/Navbar";
 
 type FormType = {
   currentPassword: string;
@@ -54,34 +53,6 @@ const UpdatePassword = () => {
 
       showToastMessage("Password updated successfully", "success");
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const axiosError = error as AxiosError;
-
-        if (axiosError.response && axiosError.response.status === 401) {
-          try {
-            await refreshToken();
-            await axios.post(
-              "http://localhost:3131/api/v1/students/password",
-              {
-                oldPassword: data.currentPassword,
-                newPassword: data.newPassword,
-              },
-              { withCredentials: true }
-            );
-
-            showToastMessage("Password updated successfully", "success");
-          } catch (refreshError) {
-            showToastMessage(
-              "Error updating password after refreshing token",
-              "error"
-            );
-          }
-        } else {
-          showToastMessage("Error updating password", "error");
-        }
-      } else {
-        showToastMessage("Unexpected error occurred", "error");
-      }
     } finally {
       reset();
     }
@@ -90,6 +61,7 @@ const UpdatePassword = () => {
   const [show, setShow] = useState({
     currentPassword: false,
     newPassword: false,
+    confirmPassword: false,
   });
 
   const inputField = {
@@ -104,7 +76,7 @@ const UpdatePassword = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <FormControl color={"#364A63"} width={{ md: "30rem" }}>
+      <FormControl color={"#364A63"}>
         <FormLabel fontSize={{ base: "sm" }}>Current Password</FormLabel>
         <InputGroup size={{ base: "sm" }}>
           <InputLeftElement>
@@ -116,6 +88,7 @@ const UpdatePassword = () => {
             })}
             type={show.currentPassword ? "text" : "password"}
             placeholder="Current Password"
+            autoComplete="current-password"
           />
           <InputRightElement height={"100%"} width={"fit-content"} pr={1}>
             <Button
@@ -137,7 +110,7 @@ const UpdatePassword = () => {
         </InputGroup>
         <Text sx={errorMsg}>{errors.currentPassword?.message}</Text>
       </FormControl>
-      <FormControl width={{ md: "30rem" }} color={"#364A63"} mt={5}>
+      <FormControl color={"#364A63"} mt={5}>
         <FormLabel htmlFor="password" fontSize={"sm"}>
           New Password
         </FormLabel>
@@ -154,6 +127,7 @@ const UpdatePassword = () => {
             size={{ base: "sm", lg: "md" }}
             placeholder="Password"
             sx={inputField}
+            autoComplete="new-password"
           />
           <InputRightElement height={"100%"} width={"fit-content"} pr={1}>
             <Button
@@ -175,7 +149,7 @@ const UpdatePassword = () => {
         </InputGroup>
         <Text sx={errorMsg}>{errors.newPassword?.message}</Text>
       </FormControl>
-      <FormControl width={{ md: "30rem" }} color={"#364A63"} mt={5}>
+      <FormControl color={"#364A63"} mt={5}>
         <FormLabel htmlFor="password" fontSize={"sm"}>
           Confirm Password
         </FormLabel>
@@ -192,11 +166,29 @@ const UpdatePassword = () => {
               validate: (value) =>
                 value === getValues("newPassword") || "Password must match.",
             })}
-            type="password"
+            type={show.confirmPassword ? "text" : "password"}
             size={{ base: "sm", lg: "md" }}
             placeholder="Password"
             sx={inputField}
+            autoComplete="confirm-password"
           />
+          <InputRightElement height={"100%"} width={"fit-content"} pr={1}>
+            <Button
+              size="xs"
+              onClick={() =>
+                setShow({ ...show, confirmPassword: !show.confirmPassword })
+              }
+              p={0}
+              bg={"none"}
+              _hover={{ bg: "none" }}
+            >
+              {show.confirmPassword ? (
+                <EyeOffIcon size={15} />
+              ) : (
+                <EyeIcon size={15} color="grey" />
+              )}
+            </Button>
+          </InputRightElement>
         </InputGroup>
         <Text sx={errorMsg}>{errors.confirmPassword?.message}</Text>
       </FormControl>

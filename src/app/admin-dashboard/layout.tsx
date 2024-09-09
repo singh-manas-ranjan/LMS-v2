@@ -1,14 +1,16 @@
-import { Box, Container, Flex } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import React, { ReactNode } from "react";
 import Sidebar from "../ui/dashboard/sidebar/Sidebar";
 import Navbar from "../ui/navbar/Navbar";
 import adminSidebarLinks from "../../../public/adminSidebarLinks";
+import { currentUser } from "@/lib/auth-session";
 
 interface Props {
   children: ReactNode;
 }
 
-const DashBoardLayout = ({ children }: Props) => {
+const DashBoardLayout = async ({ children }: Props) => {
+  const user = await currentUser();
   const container = {
     w: "100%",
     h: "100vh",
@@ -37,7 +39,11 @@ const DashBoardLayout = ({ children }: Props) => {
         <Sidebar navLinks={adminSidebarLinks} />
       </Box>
       <Box sx={nav_content_container}>
-        <Navbar navLinks={adminSidebarLinks} />
+        <Navbar
+          navLinks={adminSidebarLinks}
+          avatar={user?.avatar as string}
+          firstName={user?.firstName as string}
+        />
         {children}
       </Box>
     </Box>

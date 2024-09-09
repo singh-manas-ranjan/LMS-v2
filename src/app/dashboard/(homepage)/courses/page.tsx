@@ -7,6 +7,7 @@ import orderByBtns from "../../../../../public/orderByBtns";
 import { sxScrollbar } from "../../../../../public/scrollbarStyle";
 import { TCourse } from "../../../../../public/courses";
 import { fetchAllCourses } from "@/actions/courses/actions";
+import WithRoleCheck from "@/app/hoc/WithRoleCheck";
 
 const main = {
   width: "100%",
@@ -106,4 +107,4 @@ const Courses = () => {
   );
 };
 
-export default Courses;
+export default WithRoleCheck(Courses, "student");

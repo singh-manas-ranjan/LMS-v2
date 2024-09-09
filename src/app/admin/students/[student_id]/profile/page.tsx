@@ -183,7 +183,7 @@ const AdminStudentDetail = ({
                         fontSize={{ base: "xs", lg: "sm" }}
                         display={"flex"}
                       >
-                        {getQualification(student.qualification)}
+                        {getQualification(student.qualification as string)}
                       </Text>
                     </Box>
                     <Box display={"flex"} columnGap={2}>

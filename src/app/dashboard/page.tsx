@@ -19,6 +19,7 @@ import Barchart from "../ui/dashboard/barchart/Barchart";
 import studentRankings from "../../../public/rankingData";
 import DashBoardCourses from "../ui/dashboard/dashboardCourses/DashBoardCourses";
 import { sxScrollbar } from "../../../public/scrollbarStyle";
+import WithRoleCheck from "../hoc/WithRoleCheck";
 
 const main = {
   width: "100%",
@@ -191,4 +192,4 @@ const Dashboard = async () => {
   );
 };
 
-export default Dashboard;
+export default WithRoleCheck(Dashboard, "student");

@@ -1,3 +1,4 @@
+import WithRoleCheck from "@/app/hoc/WithRoleCheck";
 import { Box, Heading } from "@chakra-ui/react";
 import React from "react";
 
@@ -19,4 +20,4 @@ const MyProgress = () => {
   );
 };
 
-export default MyProgress;
+export default WithRoleCheck(MyProgress, "student");

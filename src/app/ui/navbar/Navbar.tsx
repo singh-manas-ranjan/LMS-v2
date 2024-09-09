@@ -122,9 +122,9 @@ export type TUser = {
   email: string;
   phone: string;
   gender: string;
-  qualification: string;
-  role: string;
-  avatar: string;
+  qualification?: string;
+  role?: string;
+  avatar?: string;
   aboutMe?: string;
   password?: string;
   domain?: string;
@@ -135,7 +135,7 @@ export type TUser = {
   experience?: TExperience[];
   achievements?: TAchievement[];
   enrolledCourses?: TCourse[];
-  publishedCourses: TCourse[];
+  publishedCourses?: TCourse[];
 };
 
 export function getUserInfoFromLocalStorage() {
@@ -229,7 +229,7 @@ const Navbar = ({ navLinks, avatar, firstName }: Props) => {
                 src={avatar ?? "/avatar.svg"}
                 width={30}
                 height={30}
-                style={{ borderRadius: "2px" }}
+                style={{ borderRadius: "50%", boxShadow: "0 0 2px #000000" }}
                 alt=""
               />{" "}
               {minWidth600 && <Text>{firstName}</Text>}

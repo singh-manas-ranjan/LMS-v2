@@ -9,38 +9,30 @@ import {
   ModalCloseButton,
   ModalBody,
 } from "@chakra-ui/react";
-import axios from "axios";
 import React from "react";
 import { FaCameraRetro } from "react-icons/fa";
 import { useSession } from "next-auth/react";
+import { updateUserAvatar, updateUserInfo } from "@/actions/profile";
+import { useTransition } from "react";
+import { useRouter } from "next/navigation";
 const UploadProfilePicBtn = ({
   user,
 }: {
   user: "STUDENTS" | "INSTRUCTORS";
 }) => {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { data: session, update } = useSession();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // const formData = new FormData(e.currentTarget);
-    // formData.append("id", session.user.id);
-
-    // try {
-    //   const response = await axios.patch(
-    //     `http://localhost:3131/api/v1/${user.toLowerCase()}/avatar`,
-    //     {
-    //       formData,
-    //     },
-    //     {
-    //       headers: {
-    //         "Content-Type": "multipart/form-data",
-    //       },
-    //     }
-    //   );
-    //   onClose();
-    // } catch (error) {
-    //   console.error("Failed to upload profile picture:", error);
-    // }
+    const formData = new FormData(e.currentTarget);
+    formData.append("id", session?.user?.id as string);
+    startTransition(() => {
+      updateUserAvatar(formData).then(() => update());
+      onClose();
+      router.refresh();
+    });
   };
 
   return (
@@ -81,13 +73,22 @@ const UploadProfilePicBtn = ({
               onSubmit={handleSubmit}
             >
               <input
+                disabled={isPending}
                 type="file"
                 name="avatar"
                 style={{ width: "100%" }}
                 accept="image/jpeg, image/png , image/jpg"
               />
-              <Button type="submit" mt={3} size={"sm"} colorScheme="teal">
-                Submit
+              <Button
+                isLoading={isPending}
+                loadingText="Uploading"
+                disabled={isPending}
+                type="submit"
+                mt={3}
+                size={"sm"}
+                colorScheme="teal"
+              >
+                Upload
               </Button>
             </form>
           </ModalBody>

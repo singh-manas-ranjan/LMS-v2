@@ -92,7 +92,6 @@ export const NewPasswordForm = () => {
                 <LockKeyholeIcon size={15} color="grey" />
               </InputLeftElement>
               <Input
-                id="new-password"
                 type="password"
                 placeholder="New Password"
                 {...register("password")}
@@ -100,6 +99,7 @@ export const NewPasswordForm = () => {
                 fontSize={{ base: ".8rem", lg: "md" }}
                 bg={"white"}
                 rounded={"4"}
+                autoComplete="confirm-password"
               />
             </InputGroup>
             <FormErrorMessage fontSize={".8rem"}>
@@ -113,7 +113,6 @@ export const NewPasswordForm = () => {
                 <LockKeyholeIcon size={15} color="grey" />
               </InputLeftElement>
               <Input
-                id="confirm-password"
                 type="password"
                 fontSize={{ base: ".8rem", lg: "md" }}
                 placeholder="Confirm Password"
@@ -121,6 +120,7 @@ export const NewPasswordForm = () => {
                 size={{ base: "sm", lg: "md" }}
                 bg={"white"}
                 rounded={"4"}
+                autoComplete="confirm-password"
               />
             </InputGroup>
             <FormErrorMessage fontSize={".8rem"}>

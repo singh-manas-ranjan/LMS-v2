@@ -196,7 +196,6 @@ export const RegisterForm = () => {
                   <LockIcon size={15} color="grey" />
                 </InputLeftElement>
                 <Input
-                  id="password"
                   type="password"
                   placeholder="Password"
                   {...register("password")}
@@ -204,6 +203,7 @@ export const RegisterForm = () => {
                   fontSize={{ base: "xs", md: "sm" }}
                   bg={"white"}
                   rounded={"4"}
+                  autoComplete="password"
                 />
               </InputGroup>
               <FormErrorMessage fontSize={".8rem"}>
@@ -217,7 +217,6 @@ export const RegisterForm = () => {
                   <LockIcon size={15} color="grey" />
                 </InputLeftElement>
                 <Input
-                  id="confirmPassword"
                   type="password"
                   placeholder="Confirm password"
                   {...register("confirmPassword")}
@@ -225,6 +224,7 @@ export const RegisterForm = () => {
                   fontSize={{ base: "xs", md: "sm" }}
                   bg={"white"}
                   rounded={"4"}
+                  autoComplete="confirm-password"
                 />
               </InputGroup>
               <FormErrorMessage fontSize={".8rem"}>

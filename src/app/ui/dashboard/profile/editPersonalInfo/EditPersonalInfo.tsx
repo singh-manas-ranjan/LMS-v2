@@ -35,13 +35,9 @@ import { BsGlobeCentralSouthAsia } from "react-icons/bs";
 import { FaMapLocation } from "react-icons/fa6";
 import { FaStreetView } from "react-icons/fa6";
 import { GiPathDistance } from "react-icons/gi";
-import {
-  addUserInfoToLocalStorage,
-  removeUserInfoFromLocalStorage,
-  TAddress,
-  TUser,
-} from "@/app/ui/navbar/Navbar";
+import { TAddress, TUser } from "@/app/ui/navbar/Navbar";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const errorText = {
   fontSize: "xs",
@@ -51,22 +47,19 @@ const errorText = {
 const EditPersonalInfo = ({
   userInfo,
   userId,
-  handleUpdateUserInfo,
 }: {
   userInfo: TUser;
   userId: string;
-  handleUpdateUserInfo: (newUserData: TUser) => void;
 }) => {
+  const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
   const displayToast = (
-    title: string,
     status: "success" | "error" | "info",
     description: string
   ) => {
     toast({
-      title,
       status,
       description,
       duration: 4000,
@@ -93,66 +86,26 @@ const EditPersonalInfo = ({
 
   const onSubmit = async (e: TUser) => {
     onClose();
-    const {
-      _id,
-      firstName,
-      lastName,
-      email,
-      phone,
-      qualification,
-      gender,
-      role,
-      avatar,
-      enrolledCourses,
-      address,
-    } = e;
+    const { firstName, lastName, email, phone, qualification, gender } = e;
     try {
-      const response = await fetch(
-        `http://localhost:3131/api/v1/students/${userId}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            firstName,
-            lastName,
-            email,
-            phone,
-            qualification,
-            gender,
-          }),
-        }
-      );
+      const response = await fetch(`http://localhost:3131/api/v1/students`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: userId,
+          firstName,
+          lastName,
+          email,
+          phone,
+          qualification,
+          gender,
+        }),
+      });
       if (response.ok) {
-        displayToast(
-          "Success",
-          "success",
-          "Student Information Updated Successfully"
-        );
-        removeUserInfoFromLocalStorage();
-        addUserInfoToLocalStorage({
-          _id,
-          firstName,
-          lastName,
-          email,
-          phone,
-          gender,
-          role,
-          avatar,
-          enrolledCourses,
-          qualification,
-          address,
-        } as TUser);
-        handleUpdateUserInfo({
-          firstName,
-          lastName,
-          email,
-          phone,
-          gender,
-          qualification,
-          address,
-        } as TUser);
+        displayToast("success", "Student Information Updated Successfully");
+        router.refresh();
       } else {
         throw new Error(response.statusText);
       }
@@ -162,36 +115,19 @@ const EditPersonalInfo = ({
   };
 
   const onAddressSubmit = async (e: TAddress) => {
-    const { firstName, lastName, email, phone, gender, qualification } =
-      userInfo;
     try {
       const response = await axios.patch(
         `http://localhost:3131/api/v1/students/${userId}`,
-        { ...userInfo, address: e }
+        { ...userInfo, id: userId, address: e }
       );
       if (response.data.body) {
-        displayToast(
-          "Success",
-          "success",
-          "Student Information Updated Successfully"
-        );
-        removeUserInfoFromLocalStorage();
-        handleUpdateUserInfo({
-          firstName,
-          lastName,
-          email,
-          phone,
-          gender,
-          qualification,
-          address: { ...e },
-        } as TUser);
-        addUserInfoToLocalStorage({ ...userInfo, address: { ...e } });
+        displayToast("success", "Student Information Updated Successfully");
+        router.refresh();
       } else {
         throw new Error(response.statusText);
       }
     } catch (error) {
       console.error(error);
-      handleUpdateUserInfo(userInfo);
     }
   };
 

@@ -3,6 +3,7 @@ import { Box, Heading } from "@chakra-ui/react";
 import React from "react";
 import coursesList from "../../../../../public/courses";
 import { sxScrollbar } from "../../../../../public/scrollbarStyle";
+import WithRoleCheck from "@/app/hoc/WithRoleCheck";
 
 const main = {
   width: "100%",
@@ -44,4 +45,4 @@ const CompletedCourses = () => {
   );
 };
 
-export default CompletedCourses;
+export default WithRoleCheck(CompletedCourses, "student");

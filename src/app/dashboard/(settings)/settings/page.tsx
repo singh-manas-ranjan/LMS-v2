@@ -1,4 +1,6 @@
-import { auth, signOut } from "@/auth";
+import WithRoleCheck from "@/app/hoc/WithRoleCheck";
+import { signOut } from "@/auth";
+import { currentUser } from "@/lib/auth-session";
 import { Box, Button, Heading } from "@chakra-ui/react";
 import React from "react";
 
@@ -13,7 +15,7 @@ const main = {
   overflow: "hidden",
 };
 const Settings = async () => {
-  const session = await auth();
+  const user = await currentUser();
   return (
     <Box sx={main}>
       <Heading as="h1" size="md">
@@ -23,4 +25,4 @@ const Settings = async () => {
   );
 };
 
-export default Settings;
+export default WithRoleCheck(Settings, "student");

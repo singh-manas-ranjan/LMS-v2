@@ -3,14 +3,14 @@ import React, { ReactNode } from "react";
 import Sidebar from "../ui/dashboard/sidebar/Sidebar";
 import Navbar from "../ui/navbar/Navbar";
 import sidebarLinks from "../../../public/sidebarLinks";
-import { auth } from "@/auth";
+import { currentUser } from "@/lib/auth-session";
 
 interface Props {
   children: ReactNode;
 }
 
 const DashBoardLayout = async ({ children }: Props) => {
-  const session = await auth();
+  const user = await currentUser();
 
   const container = {
     w: "100%",
@@ -43,8 +43,8 @@ const DashBoardLayout = async ({ children }: Props) => {
       <Box sx={nav_content_container}>
         <Navbar
           navLinks={sidebarLinks}
-          avatar={session?.user.avatar ?? ""}
-          firstName={session?.user.firstName ?? ""}
+          avatar={user?.avatar ?? ""}
+          firstName={user?.firstName ?? ""}
         />
         {children}
       </Box>
