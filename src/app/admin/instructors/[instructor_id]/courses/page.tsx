@@ -15,6 +15,7 @@ import React, { useEffect, useState } from "react";
 import { sxScrollbar } from "../../../../../../public/scrollbarStyle";
 import { TUser } from "@/app/ui/navbar/Navbar";
 import axios from "axios";
+import WithRoleCheck from "@/app/hoc/WithRoleCheck";
 
 const main = {
   width: "100%",
@@ -122,4 +123,4 @@ const MyPublishedCourses = ({ params: { instructor_id } }: Props) => {
   );
 };
 
-export default React.memo(MyPublishedCourses);
+export default WithRoleCheck(MyPublishedCourses, "admin");

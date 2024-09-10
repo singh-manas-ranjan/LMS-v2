@@ -13,6 +13,7 @@ import React, { Suspense } from "react";
 import { sxScrollbar } from "../../../../public/scrollbarStyle";
 import UsersList from "@/app/ui/adminDashboard/users/UsersList";
 import StudentFilterForm from "@/app/ui/adminDashboard/students/StudentFilterForm";
+import WithRoleCheck from "@/app/hoc/WithRoleCheck";
 
 const main = {
   width: "100%",
@@ -142,4 +143,4 @@ const AdminStudents = async () => {
   );
 };
 
-export default AdminStudents;
+export default WithRoleCheck(AdminStudents, "student");

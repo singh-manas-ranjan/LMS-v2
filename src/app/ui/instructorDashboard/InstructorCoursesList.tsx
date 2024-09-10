@@ -1,4 +1,3 @@
-"use client";
 import {
   SimpleGrid,
   Card,
@@ -16,21 +15,16 @@ import React, { useEffect, useState } from "react";
 import { TCourse } from "../../../../public/courses";
 import { getUserInfoFromLocalStorage } from "../navbar/Navbar";
 import { fetchInstructorCourses } from "@/actions/instructor/action";
+import { currentUser } from "@/lib/auth-session";
 
 const textStyle = {
   fontSize: { base: "xs", lg: "md" },
 };
 
-const InstructorCoursesList = () => {
-  const [courses, setCourses] = useState<TCourse[]>([]);
-  useEffect(() => {
-    const instructor = getUserInfoFromLocalStorage();
-    async function getInstructorCourses() {
-      const data = await fetchInstructorCourses(instructor._id ?? "");
-      setCourses(data);
-    }
-    getInstructorCourses();
-  }, []);
+const InstructorCoursesList = async () => {
+  const user = await currentUser();
+  const courses = await fetchInstructorCourses(user?.id as string);
+
   if (courses?.length === 0) {
     return (
       <Box

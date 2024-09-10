@@ -2,6 +2,7 @@ import { Box } from "@chakra-ui/react";
 import React, { ReactNode } from "react";
 import Sidebar from "../ui/dashboard/sidebar/Sidebar";
 import Navbar from "../ui/navbar/Navbar";
+import { currentUser } from "@/lib/auth-session";
 
 const instructorSidebarLinks = {
   Dashboard: [
@@ -37,7 +38,8 @@ interface Props {
   children: ReactNode;
 }
 
-const DashBoardLayout = ({ children }: Props) => {
+const DashBoardLayout = async ({ children }: Props) => {
+  const user = await currentUser();
   const container = {
     w: "100%",
     h: "100vh",
@@ -67,7 +69,11 @@ const DashBoardLayout = ({ children }: Props) => {
         <Sidebar navLinks={instructorSidebarLinks} />
       </Box>
       <Box sx={nav_content_container}>
-        <Navbar navLinks={instructorSidebarLinks} />
+        <Navbar
+          navLinks={instructorSidebarLinks}
+          avatar={user?.avatar as string}
+          firstName={user?.firstName as string}
+        />
         {children}
       </Box>
     </Box>

@@ -4,6 +4,19 @@ import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 import { LoginSchema } from "@/schemas";
 
+function getApiUrl(callbackUrl: string): string {
+  switch (callbackUrl) {
+    case "/dashboard":
+      return "http://localhost:3131/api/v1/students/login";
+    case "/instructor-dashboard":
+      return "http://localhost:3131/api/v1/instructors/login";
+    case "/admin-dashboard":
+      return "http://localhost:3131/api/v1/admin/login";
+    default:
+      throw new Error("Invalid callback URL");
+  }
+}
+
 export default {
   providers: [
     Google({
@@ -26,17 +39,17 @@ export default {
 
           const { username, password } = validatedFields.data;
 
-          // Make request to your API
-          const response = await fetch(
-            "http://localhost:3131/api/v1/users/login",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ username, password }),
-            }
-          );
+          const callbackUrl = credentials.callbackUrl as string;
+
+          const apiUrl = getApiUrl(callbackUrl as string);
+
+          const response = await fetch(apiUrl, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ username, password }),
+          });
 
           if (!response.ok) {
             console.error("Failed to fetch user:", response.statusText);

@@ -1,4 +1,5 @@
 import { fetchAllUsers } from "@/actions/users/action";
+import WithRoleCheck from "@/app/hoc/WithRoleCheck";
 import {
   Box,
   Button,
@@ -121,4 +122,4 @@ const UsersAccounts = async ({ params: { user_type } }: Props) => {
   );
 };
 
-export default UsersAccounts;
+export default WithRoleCheck(UsersAccounts, "admin");

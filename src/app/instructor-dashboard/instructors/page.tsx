@@ -1,17 +1,9 @@
-import {
-  Box,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Heading,
-  Image,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Heading } from "@chakra-ui/react";
 import React from "react";
 import { sxScrollbar } from "../../../../public/scrollbarStyle";
 import { fetchAllUsers } from "@/actions/users/action";
 import InstructorList from "@/app/ui/instructorDashboard/InstructorList";
+import WithRoleCheck from "@/app/hoc/WithRoleCheck";
 
 const main = {
   width: "100%",
@@ -52,4 +44,4 @@ const Instructors = async () => {
   );
 };
 
-export default Instructors;
+export default WithRoleCheck(Instructors, "instructor");

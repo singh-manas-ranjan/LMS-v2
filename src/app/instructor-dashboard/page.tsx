@@ -20,6 +20,7 @@ import { popularTasks } from "../ui/adminDashboard/overview/bottomCards/Overview
 import studentRankings, { TStudentRankings } from "../../../public/rankingData";
 import InstructorDashboardCourses from "../ui/instructorDashboard/InstructorDashboardCourses";
 import NextLink from "next/link";
+import WithRoleCheck from "../hoc/WithRoleCheck";
 
 const main = {
   width: "100%",
@@ -378,4 +379,4 @@ const InstructorDashboard = async () => {
   );
 };
 
-export default InstructorDashboard;
+export default WithRoleCheck(InstructorDashboard, "instructor");

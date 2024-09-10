@@ -32,6 +32,7 @@ import { TCourse } from "../../../../../../public/courses";
 import { fetchAllCourses } from "@/actions/courses/actions";
 import { setEnrolledCourses } from "@/actions/enrolledCourses/action";
 import { initialState, userDataReducer } from "@/utils/hooks";
+import WithRoleCheck from "@/app/hoc/WithRoleCheck";
 
 const main = {
   width: "100%",
@@ -319,4 +320,4 @@ const MyCourses = ({ params: { student_id } }: Props) => {
   );
 };
 
-export default React.memo(MyCourses);
+export default WithRoleCheck(MyCourses, "admin");

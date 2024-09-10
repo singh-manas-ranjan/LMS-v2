@@ -7,7 +7,7 @@ export const AccountType = () => {
   return (
     <Box
       display={"flex"}
-      flexDir={{ base: "column", sm: "row" }}
+      flexDir={{ base: "column", lg: "row" }}
       rowGap={20}
       columnGap={{ base: 5, sm: 10 }}
     >
@@ -88,6 +88,46 @@ export const AccountType = () => {
             m={5}
           >
             Instructor
+          </Text>
+        </Link>
+      </Box>
+      <Box
+        flex={1}
+        w={{ base: "250px" }}
+        p={5}
+        border={"1px"}
+        borderColor={"gray.200"}
+        marginInline={"auto"}
+        rounded={"md"}
+        shadow={"md"}
+        bg="rgba(225, 225, 225, .9)"
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"center"}
+        _hover={{
+          cursor: "pointer",
+          bg: "rgba(225, 225, 225, 0.8)",
+        }}
+        position={"relative"}
+      >
+        <Box
+          w={90}
+          h={90}
+          position={"absolute"}
+          top={"-50px"}
+          bgImage={"/admin.png"}
+          bgSize={"cover"}
+          bgRepeat={"no-repeat"}
+          bgPosition={"center"}
+          rounded={"50%"}
+        />
+        <Link href={"/admin-dashboard"} style={{ marginTop: "15px" }}>
+          <Text
+            fontSize={{ base: "md", sm: "x-large" }}
+            textAlign={"center"}
+            m={5}
+          >
+            Admin
           </Text>
         </Link>
       </Box>

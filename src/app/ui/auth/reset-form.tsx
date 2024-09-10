@@ -141,7 +141,10 @@ export const ResetForm = () => {
           </Button>
         </Box>
         <Box mt={3} display={"flex"} justifyContent={"center"} w={"100%"}>
-          <Link href={"/"} style={{ color: "#0275d8", fontSize: ".8rem" }}>
+          <Link
+            href={"/auth/account-type"}
+            style={{ color: "#0275d8", fontSize: ".8rem" }}
+          >
             Back to Login
           </Link>
         </Box>

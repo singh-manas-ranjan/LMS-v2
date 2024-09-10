@@ -14,6 +14,7 @@ import React from "react";
 import { sxScrollbar } from "../../../../public/scrollbarStyle";
 import { TCourse } from "../../../../public/courses";
 import { fetchAllCourses } from "@/actions/courses/actions";
+import WithRoleCheck from "@/app/hoc/WithRoleCheck";
 
 const main = {
   width: "100%",
@@ -93,4 +94,4 @@ const AdminCourses = async () => {
   );
 };
 
-export default AdminCourses;
+export default WithRoleCheck(AdminCourses, "admin");

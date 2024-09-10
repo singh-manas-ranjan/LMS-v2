@@ -1,6 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import React, { Suspense } from "react";
 import Overview from "../ui/adminDashboard/overview/Overview";
+import WithRoleCheck from "../hoc/WithRoleCheck";
 
 const main = {
   width: "100%",
@@ -22,4 +23,4 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard;
+export default WithRoleCheck(AdminDashboard, "admin");

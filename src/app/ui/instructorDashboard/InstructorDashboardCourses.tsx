@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect, useState } from "react";
 import { getUserInfoFromLocalStorage } from "../navbar/Navbar";
 import {
@@ -14,17 +13,11 @@ import {
 
 import { fetchInstructorCourses } from "@/actions/instructor/action";
 import { TCourse } from "../../../../public/courses";
+import { currentUser } from "@/lib/auth-session";
+const InstructorDashboardCourses = async () => {
+  const user = await currentUser();
+  const courses = await fetchInstructorCourses(user?.id as string);
 
-const InstructorDashboardCourses = () => {
-  const [courses, setCourses] = useState<TCourse[]>([]);
-  useEffect(() => {
-    const instructor = getUserInfoFromLocalStorage();
-    async function getInstructorCourses() {
-      const data = await fetchInstructorCourses(instructor._id ?? "");
-      setCourses(data);
-    }
-    getInstructorCourses();
-  }, []);
   if (courses?.length === 0) {
     return (
       <Box

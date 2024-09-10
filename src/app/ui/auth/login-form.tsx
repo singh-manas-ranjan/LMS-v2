@@ -127,6 +127,14 @@ export const LoginForm = () => {
 
           <FormSuccess message={success} />
           <FormError message={error} />
+          <Box display={"flex"} justifyContent={"start"} w={"100%"}>
+            <Link
+              href={"/auth/reset"}
+              style={{ color: "#0275d8", fontSize: ".8rem" }}
+            >
+              Forgot Password?
+            </Link>
+          </Box>
 
           <Box w={"100%"} display={"flex"} justifyContent={"center"}>
             <Button

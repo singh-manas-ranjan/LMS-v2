@@ -25,6 +25,7 @@ import { TUser } from "@/app/ui/navbar/Navbar";
 import studentRankings, {
   TStudentRankings,
 } from "../../../../../../public/rankingData";
+import WithRoleCheck from "@/app/hoc/WithRoleCheck";
 
 const main = {
   width: "100%",
@@ -436,4 +437,4 @@ const AdminInstructorDashboard = ({ params: { instructor_id } }: Props) => {
   );
 };
 
-export default React.memo(AdminInstructorDashboard);
+export default WithRoleCheck(AdminInstructorDashboard, "admin");

@@ -3,6 +3,7 @@ import InstructorCoursesList from "@/app/ui/instructorDashboard/InstructorCourse
 import { Box, Heading } from "@chakra-ui/react";
 import React from "react";
 import { sxScrollbar } from "../../../../public/scrollbarStyle";
+import WithRoleCheck from "@/app/hoc/WithRoleCheck";
 
 const main = {
   width: "100%",
@@ -40,4 +41,4 @@ const InstructorCourses = () => {
   );
 };
 
-export default InstructorCourses;
+export default WithRoleCheck(InstructorCourses, "instructor");

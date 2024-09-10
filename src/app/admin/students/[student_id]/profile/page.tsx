@@ -18,6 +18,7 @@ import { RiVerifiedBadgeFill } from "react-icons/ri";
 import { sxScrollbar } from "../../../../../../public/scrollbarStyle";
 import axios from "axios";
 import { initialState, userDataReducer } from "@/utils/hooks";
+import WithRoleCheck from "@/app/hoc/WithRoleCheck";
 
 const main = {
   width: "100%",
@@ -513,4 +514,4 @@ const AdminStudentDetail = ({
   );
 };
 
-export default React.memo(AdminStudentDetail);
+export default WithRoleCheck(AdminStudentDetail, "admin");

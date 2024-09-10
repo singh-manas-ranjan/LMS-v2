@@ -28,6 +28,7 @@ import { sxScrollbar } from "../../../../../../public/scrollbarStyle";
 import { TUser } from "@/app/ui/navbar/Navbar";
 import axios from "axios";
 import { initialState, userDataReducer } from "@/utils/hooks";
+import WithRoleCheck from "@/app/hoc/WithRoleCheck";
 
 const main = {
   width: "100%",
@@ -737,4 +738,4 @@ const AdminInstructorProfile = ({
   );
 };
 
-export default React.memo(AdminInstructorProfile);
+export default WithRoleCheck(AdminInstructorProfile, "admin");

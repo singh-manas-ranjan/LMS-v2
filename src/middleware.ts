@@ -1,24 +1,23 @@
 import NextAuth from "next-auth";
 import authConfig from "@/auth.config";
-
 import { apiAuthPrefix, authRoutes, publicRoutes } from "@/routes";
 
 const { auth } = NextAuth(authConfig);
 
-export default auth((req) => {
+export default auth(async (req) => {
   const { nextUrl } = req;
-  const isLoggedIn = !!req.auth;
 
+  const isLoggedIn = !!req.auth;
   const isApiAuthRoutes = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isPublicRoutes = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoutes = authRoutes.includes(nextUrl.pathname);
 
   if (isApiAuthRoutes) {
-    return null;
+    return;
   }
 
   if (isAuthRoutes) {
-    return null;
+    return;
   }
 
   if (!isLoggedIn && !isPublicRoutes) {
@@ -31,7 +30,8 @@ export default auth((req) => {
       new URL(`/auth/login?callbackUrl=${encodedCallbackUrl}`, nextUrl)
     );
   }
-  return null;
+
+  return;
 });
 
 // Optionally, don't invoke Middleware on some paths

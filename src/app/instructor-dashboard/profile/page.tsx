@@ -1,4 +1,3 @@
-"use client";
 import {
   Box,
   Heading,
@@ -22,13 +21,15 @@ import {
   WrapItem,
   Flex,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
 import { sxScrollbar } from "../../../../public/scrollbarStyle";
-import { getUserInfoFromLocalStorage, TUser } from "@/app/ui/navbar/Navbar";
+import { TUser } from "@/app/ui/navbar/Navbar";
 import UploadProfilePicBtn from "@/app/ui/dashboard/profile/UploadProfilePicBtn";
 import { BookAIcon, MailCheckIcon, MapIcon, MedalIcon } from "lucide-react";
-import InstructorProfileEditForm from "@/app/ui/instructorDashboard/InstructorProfileEditForm";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
+import { getUserInfoByEmail } from "@/actions/users/action";
+import { currentUser } from "@/lib/auth-session";
+import InstructorProfileEditForm from "@/app/ui/instructorDashboard/InstructorProfileEditForm";
+import WithRoleCheck from "@/app/hoc/WithRoleCheck";
 
 const main = {
   width: "100%",
@@ -69,19 +70,9 @@ const timings = [
   "04:00pm",
 ];
 
-const InstructorProfile = () => {
-  const [instructor, setInstructor] = useState({} as TUser);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const instructor = getUserInfoFromLocalStorage();
-    setInstructor(instructor);
-    setLoading(false);
-  }, []);
-
-  function handleUpdateInstructor(newInstructor: TUser) {
-    setInstructor(newInstructor);
-  }
+const InstructorProfile = async () => {
+  const user = await currentUser();
+  const instructor: TUser = await getUserInfoByEmail(user?.email as string);
 
   return (
     <Box as="main" sx={main} overflow={"hidden"}>
@@ -99,7 +90,6 @@ const InstructorProfile = () => {
         <InstructorProfileEditForm
           userId={instructor?._id ?? ""}
           userInfo={instructor}
-          handleUpdateInstructor={handleUpdateInstructor}
         />
       </Box>
       <Box
@@ -110,7 +100,7 @@ const InstructorProfile = () => {
         sx={sxScrollbar}
       >
         <Box p={"1rem"} w={"100%"}>
-          {loading ? (
+          {!instructor ? (
             <Box
               padding="6"
               boxShadow={
@@ -263,7 +253,7 @@ const InstructorProfile = () => {
             flexDir={"column"}
             rowGap={5}
           >
-            {loading ? (
+            {!instructor ? (
               <Card
                 boxShadow={
                   "rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em"
@@ -305,7 +295,7 @@ const InstructorProfile = () => {
                 </CardBody>
               </Card>
             )}
-            {loading ? (
+            {!instructor ? (
               <Card
                 boxShadow={
                   "rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em"
@@ -378,7 +368,7 @@ const InstructorProfile = () => {
                 </CardBody>
               </Card>
             )}
-            {loading ? (
+            {!instructor ? (
               <Card
                 boxShadow={
                   "rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em"
@@ -451,7 +441,7 @@ const InstructorProfile = () => {
                 </CardBody>
               </Card>
             )}
-            {loading ? (
+            {!instructor ? (
               <Card
                 boxShadow={
                   "rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em"
@@ -540,7 +530,7 @@ const InstructorProfile = () => {
               </Card>
             )}
           </Box>
-          {/* {!loading && ( */}
+          {/* {!!instructor && ( */}
           <Box
             flex={{ md: 2.5, lg: 2 }}
             w={"100%"}
@@ -549,7 +539,7 @@ const InstructorProfile = () => {
             flexDir={"column"}
             rowGap={5}
           >
-            {loading ? (
+            {!instructor ? (
               <Card
                 boxShadow={
                   "rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em"
@@ -608,7 +598,7 @@ const InstructorProfile = () => {
                 </CardBody>
               </Card>
             )}
-            {loading ? (
+            {!instructor ? (
               <Card
                 boxShadow={
                   "rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em"
@@ -665,7 +655,7 @@ const InstructorProfile = () => {
               </Card>
             )}
 
-            {loading ? (
+            {!instructor ? (
               <Card
                 boxShadow={
                   "rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em"
@@ -720,7 +710,7 @@ const InstructorProfile = () => {
                 </CardBody>
               </Card>
             )}
-            {loading ? (
+            {!instructor ? (
               <Card
                 boxShadow={
                   "rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em"
@@ -815,4 +805,4 @@ const InstructorProfile = () => {
   );
 };
 
-export default React.memo(InstructorProfile);
+export default WithRoleCheck(InstructorProfile, "instructor");

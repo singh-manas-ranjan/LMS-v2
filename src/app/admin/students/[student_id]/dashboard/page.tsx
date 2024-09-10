@@ -23,6 +23,7 @@ import StudentDashboardBannerCarousel from "@/app/ui/adminDashboard/studentBanne
 import axios from "axios";
 import { sxScrollbar } from "../../../../../../public/scrollbarStyle";
 import { userDataReducer, initialState } from "@/utils/hooks";
+import WithRoleCheck from "@/app/hoc/WithRoleCheck";
 
 interface Props {
   params: { student_id: string };
@@ -353,4 +354,4 @@ const AdminStudentDashboard = ({ params: { student_id } }: Props) => {
   );
 };
 
-export default React.memo(AdminStudentDashboard);
+export default WithRoleCheck(AdminStudentDashboard, "admin");

@@ -3,14 +3,14 @@ import authConfig from "./auth.config";
 import { getUserInfoByEmail } from "./actions/users/action";
 import { TAddress } from "./actions/instructor/action";
 
-enum UserRole {
+export enum UserRole {
   STUDENT = "student",
   INSTRUCTOR = "instructor",
   ADMIN = "admin",
 }
 
 declare module "next-auth" {
-  interface Session {
+  interface Session extends DefaultSession {
     user: {
       role: UserRole;
       phone: string;
@@ -20,6 +20,7 @@ declare module "next-auth" {
       gender: string;
       address: TAddress;
       aboutMe: string;
+      qualification?: string;
     } & DefaultSession["user"];
   }
 }
@@ -42,8 +43,26 @@ export const {
     async signIn({ user, account }) {
       return true;
     },
+    async jwt({ token }) {
+      if (!token.sub) return token;
+
+      const existingUser = await getUserInfoByEmail(token?.email ?? "");
+
+      if (!existingUser) return token;
+
+      token.role = existingUser.role;
+      token.firstName = existingUser.firstName;
+      token.lastName = existingUser.lastName;
+      token.avatar = existingUser.avatar;
+      token.address = existingUser.address;
+      token.gender = existingUser.gender;
+      token.aboutMe = existingUser.aboutMe;
+      token.phone = existingUser.phone;
+      token.qualification = existingUser.qualification;
+      return token;
+    },
     async session({ session, token }) {
-      if (token) {
+      if (token.sub && session.user) {
         session.user = {
           ...session.user,
           id: token.sub as string,
@@ -55,34 +74,12 @@ export const {
           aboutMe: token.aboutMe as string,
           address: token.address as TAddress,
           phone: token.phone as string,
-          name: token.name as string,
           email: token.email as string,
+          qualification: token.qualification as string,
         };
       }
+
       return session;
-    },
-    async jwt({ token, user, session, trigger }) {
-      if (!token.sub) return token;
-      try {
-        if (user?.email) {
-          const existingUser = await getUserInfoByEmail(user.email);
-          if (existingUser) {
-            Object.assign(token, {
-              role: existingUser.role,
-              firstName: existingUser.firstName,
-              lastName: existingUser.lastName,
-              avatar: existingUser.avatar,
-              address: existingUser.address,
-              gender: existingUser.gender,
-              aboutMe: existingUser.aboutMe,
-              phone: existingUser.phone,
-            });
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching user info:", error);
-      }
-      return token;
     },
   },
   session: { strategy: "jwt" },

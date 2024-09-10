@@ -50,6 +50,7 @@ import axios from "axios";
 import { ChevronDownIcon } from "lucide-react";
 import { sxScrollbar } from "../../../../public/scrollbarStyle";
 import { Select as ChakraSelect, MultiValue } from "chakra-react-select";
+import { useRouter } from "next/navigation";
 
 const errorText = {
   fontSize: "xs",
@@ -59,12 +60,11 @@ const errorText = {
 const InstructorProfileEditForm = ({
   userInfo,
   userId,
-  handleUpdateInstructor,
 }: {
   userInfo: TUser;
   userId: string;
-  handleUpdateInstructor: (newInstructor: TUser) => void;
 }) => {
+  const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
@@ -316,47 +316,41 @@ const InstructorProfileEditForm = ({
     onClose();
     console.log(e);
 
-    handleUpdateInstructor(e);
-    console.log(e);
-
     try {
       const response = await axios.patch(
-        `http://localhost:3131/api/v1/instructors/${userId}`,
-        e
+        `http://localhost:3131/api/v1/instructors/`,
+        { ...e, id: userId }
       );
       if (response.data.body) {
         displayToast("Success", "success", "Updated Successfully");
-        removeUserInfoFromLocalStorage();
-        addUserInfoToLocalStorage(e);
       } else {
         throw new Error(response.statusText);
       }
     } catch (error) {
-      handleUpdateInstructor(userInfo);
       console.error(error);
     }
+    router.refresh();
+    setFormStep(0);
   };
 
   const onAddressSubmit = async (e: TAddress) => {
     onClose();
     console.log(e);
-    handleUpdateInstructor({ ...userInfo, address: e });
     try {
       const response = await axios.patch(
-        `http://localhost:3131/api/v1/instructors/${userId}`,
-        { ...userInfo, address: e }
+        `http://localhost:3131/api/v1/instructors/`,
+        { ...userInfo, id: userId, address: e }
       );
       if (response.data.body) {
         displayToast("Success", "success", "Updated Successfully");
-        removeUserInfoFromLocalStorage();
-        addUserInfoToLocalStorage({ ...userInfo, address: e });
       } else {
         throw new Error(response.statusText);
       }
     } catch (error) {
-      handleUpdateInstructor(userInfo);
       console.error(error);
     }
+    router.refresh();
+    setFormStep(0);
   };
 
   const onReset = () => {

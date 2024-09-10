@@ -4,7 +4,8 @@ import { Text } from "@chakra-ui/react";
 import VideoPlayerComponent from "@/app/ui/dashboard/enrolledCoursesContainer/myCoursesCard/videoPlayer/VideoPlayerComponent";
 import { TCourse } from "../../../../../../public/courses";
 import axios from "axios";
-import { useSession } from "next-auth/react";
+import { useCurrentUser } from "@/hooks/use-current-user";
+import WithRoleCheck from "@/app/hoc/WithRoleCheck";
 interface Props {
   params: { courseId: string };
   searchParams: {
@@ -13,7 +14,7 @@ interface Props {
 }
 
 const VideoPlayer = ({ params, searchParams }: Props) => {
-  const { data: session } = useSession();
+  const user = useCurrentUser();
   const courseId = params.courseId;
   const sectionNo = Number(searchParams.section) - 1;
   const lectureNo = Number(searchParams.lecture) - 1;
@@ -24,15 +25,13 @@ const VideoPlayer = ({ params, searchParams }: Props) => {
       if (typeof window === "undefined") return {} as TCourse[];
 
       const eCourses: TCourse[] = await axios
-        .get(
-          `http://localhost:3131/api/v1/students/courses/${session?.user.id}`
-        )
+        .get(`http://localhost:3131/api/v1/students/courses/${user?.id}`)
         .then((res) => res.data.body);
 
       setCoursesList(eCourses);
     }
     getCoursesList();
-  }, [session?.user.id]);
+  }, [user?.id]);
 
   const course: TCourse | undefined = coursesList.find(
     (course) => course._id === courseId
@@ -50,4 +49,4 @@ const VideoPlayer = ({ params, searchParams }: Props) => {
   return <VideoPlayerComponent url={selectedLecture} />;
 };
 
-export default React.memo(VideoPlayer);
+export default WithRoleCheck(VideoPlayer, "student");
