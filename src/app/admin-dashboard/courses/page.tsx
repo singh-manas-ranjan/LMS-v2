@@ -15,6 +15,12 @@ import { sxScrollbar } from "../../../../public/scrollbarStyle";
 import { TCourse } from "../../../../public/courses";
 import { fetchAllCourses } from "@/actions/courses/actions";
 import WithRoleCheck from "@/app/hoc/WithRoleCheck";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Learnopia | Courses",
+  description: "Learnopia | Courses",
+};
 
 const main = {
   width: "100%",

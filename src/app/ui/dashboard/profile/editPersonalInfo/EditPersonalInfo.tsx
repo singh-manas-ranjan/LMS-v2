@@ -115,9 +115,10 @@ const EditPersonalInfo = ({
   };
 
   const onAddressSubmit = async (e: TAddress) => {
+    onClose();
     try {
       const response = await axios.patch(
-        `http://localhost:3131/api/v1/students/${userId}`,
+        `http://localhost:3131/api/v1/students`,
         { ...userInfo, id: userId, address: e }
       );
       if (response.data.body) {

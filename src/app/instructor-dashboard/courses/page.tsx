@@ -1,9 +1,14 @@
-import CompletedCourseCard from "@/app/ui/dashboard/completedCourseCard/CompletedCourseCard";
 import InstructorCoursesList from "@/app/ui/instructorDashboard/InstructorCoursesList";
 import { Box, Heading } from "@chakra-ui/react";
 import React from "react";
 import { sxScrollbar } from "../../../../public/scrollbarStyle";
 import WithRoleCheck from "@/app/hoc/WithRoleCheck";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Learnopia | Courses",
+  description: "Learnopia | Courses",
+};
 
 const main = {
   width: "100%",

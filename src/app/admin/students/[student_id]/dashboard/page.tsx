@@ -1,4 +1,3 @@
-"use client";
 import {
   Box,
   Flex,
@@ -13,44 +12,24 @@ import {
   Grid,
   Text,
   WrapItem,
-  Spinner,
 } from "@chakra-ui/react";
-import React, { useEffect, useReducer } from "react";
+import React from "react";
 import NextLink from "next/link";
 import { popularTasks } from "@/app/ui/adminDashboard/overview/bottomCards/OverviewBottomCards";
 import StudentDashboardBannerCarousel from "@/app/ui/adminDashboard/studentBannerCarousel/StudentDashboardBannerCarousel";
 
-import axios from "axios";
 import { sxScrollbar } from "../../../../../../public/scrollbarStyle";
-import { userDataReducer, initialState } from "@/utils/hooks";
-import WithRoleCheck from "@/app/hoc/WithRoleCheck";
+import axios from "axios";
+import { TUser } from "@/app/ui/navbar/Navbar";
+import withRoleCheck from "@/app/hoc/WithRoleCheck";
 
 interface Props {
   params: { student_id: string };
 }
-const AdminStudentDashboard = ({ params: { student_id } }: Props) => {
-  const [state, dispatch] = useReducer(userDataReducer, initialState);
-  const student = state.data;
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        dispatch({ type: "FETCH_REQUEST" });
-        const response = await axios.get(
-          `http://localhost:3131/api/v1/admin/access/students/${student_id}`,
-          {
-            withCredentials: true,
-          }
-        );
-        dispatch({ type: "FETCH_SUCCESS", payload: response.data.body });
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-        dispatch({ type: "FETCH_FAILURE" });
-      }
-    };
-
-    fetchUserData();
-  }, [student_id]);
+const AdminStudentDashboard = async ({ params: { student_id } }: Props) => {
+  const student: TUser = await axios
+    .get(`http://localhost:3131/api/v1/admin/access/students/${student_id}`)
+    .then((res) => res.data.body);
   return (
     <Box
       as="main"
@@ -188,51 +167,32 @@ const AdminStudentDashboard = ({ params: { student_id } }: Props) => {
                 paddingInline={{ base: 0, md: "1rem" }}
               >
                 <Box h={"100%"} w={"100%"}>
-                  {state.loading ? (
-                    <Box
-                      display={"grid"}
-                      placeItems={"center"}
-                      w={"100%"}
-                      h={"100%"}
-                    >
-                      <Spinner
-                        thickness="4px"
-                        speed="0.85s"
-                        emptyColor="gray.200"
-                        color="blue.500"
-                        size="xl"
-                      />
-                    </Box>
-                  ) : (
-                    <Accordion h={"100%"}>
-                      {student.enrolledCourses
-                        ?.slice(0, 4)
-                        .map((course, idx) => (
-                          <AccordionItem key={idx}>
-                            <Text>
-                              <AccordionButton>
-                                <Box as="span" flex="1" textAlign="left">
-                                  <WrapItem>
-                                    <Grid m={2}>
-                                      <Text fontSize={{ base: "xs", md: "sm" }}>
-                                        {course.courseName}
-                                      </Text>
-                                      <Text
-                                        fontSize={{
-                                          base: "xs",
-                                          md: "sm",
-                                        }}
-                                        color={"#8D94A3"}
-                                      >{`Rating: ${course.courseRating}`}</Text>
-                                    </Grid>
-                                  </WrapItem>
-                                </Box>
-                              </AccordionButton>
-                            </Text>
-                          </AccordionItem>
-                        ))}
-                    </Accordion>
-                  )}
+                  <Accordion h={"100%"}>
+                    {student.enrolledCourses?.slice(0, 4).map((course, idx) => (
+                      <AccordionItem key={idx}>
+                        <Text>
+                          <AccordionButton>
+                            <Box as="span" flex="1" textAlign="left">
+                              <WrapItem>
+                                <Grid m={2}>
+                                  <Text fontSize={{ base: "xs", md: "sm" }}>
+                                    {course.courseName}
+                                  </Text>
+                                  <Text
+                                    fontSize={{
+                                      base: "xs",
+                                      md: "sm",
+                                    }}
+                                    color={"#8D94A3"}
+                                  >{`Rating: ${course.courseRating}`}</Text>
+                                </Grid>
+                              </WrapItem>
+                            </Box>
+                          </AccordionButton>
+                        </Text>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
                 </Box>
               </CardBody>
             </Card>
@@ -354,4 +314,4 @@ const AdminStudentDashboard = ({ params: { student_id } }: Props) => {
   );
 };
 
-export default WithRoleCheck(AdminStudentDashboard, "admin");
+export default withRoleCheck(AdminStudentDashboard, "admin");

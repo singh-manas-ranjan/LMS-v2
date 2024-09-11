@@ -1,11 +1,10 @@
-"use client";
-import React, { useEffect, useMemo, useState } from "react";
 import { Text } from "@chakra-ui/react";
 import VideoPlayerComponent from "@/app/ui/dashboard/enrolledCoursesContainer/myCoursesCard/videoPlayer/VideoPlayerComponent";
 import { TCourse } from "../../../../../../public/courses";
 import axios from "axios";
-import { useCurrentUser } from "@/hooks/use-current-user";
-import WithRoleCheck from "@/app/hoc/WithRoleCheck";
+import { redirect } from "next/navigation";
+import { currentUser } from "@/lib/auth-session";
+
 interface Props {
   params: { courseId: string };
   searchParams: {
@@ -13,25 +12,24 @@ interface Props {
   };
 }
 
-const VideoPlayer = ({ params, searchParams }: Props) => {
-  const user = useCurrentUser();
-  const courseId = params.courseId;
+const VideoPlayer = async ({ params: { courseId }, searchParams }: Props) => {
+  const user = await currentUser();
+
+  if (!user || user.role !== "student") {
+    redirect("/forbidden");
+    return null;
+  }
+
   const sectionNo = Number(searchParams.section) - 1;
   const lectureNo = Number(searchParams.lecture) - 1;
-  const [coursesList, setCoursesList] = useState<TCourse[]>([]);
 
-  useEffect(() => {
-    async function getCoursesList() {
-      if (typeof window === "undefined") return {} as TCourse[];
-
-      const eCourses: TCourse[] = await axios
-        .get(`http://localhost:3131/api/v1/students/courses/${user?.id}`)
-        .then((res) => res.data.body);
-
-      setCoursesList(eCourses);
-    }
-    getCoursesList();
-  }, [user?.id]);
+  const coursesList: TCourse[] = await axios
+    .get(`http://localhost:3131/api/v1/students/courses/${user?.id}`)
+    .then((res) => res.data.body)
+    .catch((error) => {
+      console.error("Error fetching courses:", error);
+      return [];
+    });
 
   const course: TCourse | undefined = coursesList.find(
     (course) => course._id === courseId
@@ -46,7 +44,8 @@ const VideoPlayer = ({ params, searchParams }: Props) => {
   if (!selectedLecture) {
     return <Text>No video available.</Text>;
   }
+
   return <VideoPlayerComponent url={selectedLecture} />;
 };
 
-export default WithRoleCheck(VideoPlayer, "student");
+export default VideoPlayer;

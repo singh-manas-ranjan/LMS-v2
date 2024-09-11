@@ -5,3 +5,9 @@ export const useCurrentUser = () => {
 
   return session?.user;
 };
+
+export const useCurrentUserSession = () => {
+  const { data: session, status } = useSession();
+
+  return { user: session?.user, loading: status === "loading" };
+};

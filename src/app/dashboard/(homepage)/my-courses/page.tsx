@@ -3,6 +3,12 @@ import { Box } from "@chakra-ui/react";
 import React from "react";
 import { sxScrollbar } from "../../../../../public/scrollbarStyle";
 import WithRoleCheck from "@/app/hoc/WithRoleCheck";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Learnopia | My Courses",
+  description: "Learnopia | My Courses",
+};
 
 const main = {
   width: "100%",

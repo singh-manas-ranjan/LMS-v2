@@ -4,6 +4,12 @@ import { sxScrollbar } from "../../../../public/scrollbarStyle";
 import { fetchAllUsers } from "@/actions/users/action";
 import InstructorList from "@/app/ui/instructorDashboard/InstructorList";
 import WithRoleCheck from "@/app/hoc/WithRoleCheck";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Learnopia | Instructors",
+  description: "Learnopia | Instructors",
+};
 
 const main = {
   width: "100%",

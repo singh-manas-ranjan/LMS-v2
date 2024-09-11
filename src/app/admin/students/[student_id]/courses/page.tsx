@@ -33,6 +33,8 @@ import { fetchAllCourses } from "@/actions/courses/actions";
 import { setEnrolledCourses } from "@/actions/enrolledCourses/action";
 import { initialState, userDataReducer } from "@/utils/hooks";
 import WithRoleCheck from "@/app/hoc/WithRoleCheck";
+import { useRouter } from "next/navigation";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
 const main = {
   width: "100%",
@@ -66,17 +68,23 @@ const MyCourses = ({ params: { student_id } }: Props) => {
       course_id: "",
     },
   });
+  const router = useRouter();
+  const user = useCurrentUser();
   const [AllCourses, setAllCourses] = useState<TCourse[]>([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
+      if (!user) {
+        return;
+      }
+      if (user.role !== "admin") {
+        router.push("/forbidden");
+        return;
+      }
       try {
         dispatch({ type: "FETCH_REQUEST" });
         const response = await axios.get(
-          `http://localhost:3131/api/v1/admin/access/students/${student_id}`,
-          {
-            withCredentials: true,
-          }
+          `http://localhost:3131/api/v1/admin/access/students/${student_id}`
         );
         dispatch({ type: "FETCH_SUCCESS", payload: response.data.body });
         setAllCourses(await fetchAllCourses());
@@ -87,7 +95,7 @@ const MyCourses = ({ params: { student_id } }: Props) => {
     };
 
     fetchUserData();
-  }, [student_id]);
+  }, [router, student_id, user]);
 
   const toast = useToast();
   const showToast = async (
@@ -320,4 +328,4 @@ const MyCourses = ({ params: { student_id } }: Props) => {
   );
 };
 
-export default WithRoleCheck(MyCourses, "admin");
+export default MyCourses;

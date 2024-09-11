@@ -20,6 +20,12 @@ import studentRankings from "../../../public/rankingData";
 import DashBoardCourses from "../ui/dashboard/dashboardCourses/DashBoardCourses";
 import { sxScrollbar } from "../../../public/scrollbarStyle";
 import WithRoleCheck from "../hoc/WithRoleCheck";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Learnopia | Dashboard",
+  description: "Learnopia | Dashboard",
+};
 
 const main = {
   width: "100%",

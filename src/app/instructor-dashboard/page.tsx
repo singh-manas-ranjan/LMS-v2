@@ -21,6 +21,12 @@ import studentRankings, { TStudentRankings } from "../../../public/rankingData";
 import InstructorDashboardCourses from "../ui/instructorDashboard/InstructorDashboardCourses";
 import NextLink from "next/link";
 import WithRoleCheck from "../hoc/WithRoleCheck";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Learnopia | Dashboard",
+  description: "Learnopia | Dashboard",
+};
 
 const main = {
   width: "100%",

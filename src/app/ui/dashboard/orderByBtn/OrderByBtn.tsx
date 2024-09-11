@@ -12,10 +12,10 @@ import React from "react";
 import { MdOutlineFilterAlt } from "react-icons/md";
 import { HiSortAscending } from "react-icons/hi";
 import { orderByBtnType } from "../../../../../public/orderByBtns";
+import { useRouter } from "next/navigation";
 
 interface Props {
   button: orderByBtnType;
-  handleOnChange: (option: string | string[]) => void;
   selectedOptn: string;
 }
 
@@ -23,20 +23,23 @@ const getIcon = (btnName: string): JSX.Element | null => {
   switch (btnName) {
     case "Filter":
       return <MdOutlineFilterAlt />;
-      break;
     case "Sort":
       return <HiSortAscending />;
-
     default:
       return null;
   }
 };
 
-const OrderByBtn = ({
-  button: { btnName, options },
-  handleOnChange,
-  selectedOptn,
-}: Props) => {
+const OrderByBtn = ({ button: { btnName, options }, selectedOptn }: Props) => {
+  const router = useRouter();
+
+  const handleOnChange = (value: string | string[]) => {
+    const queryParam = btnName.toLowerCase();
+    const url = new URL(window.location.href);
+    url.searchParams.set(queryParam, value.toString());
+    router.push(url.toString());
+  };
+
   return (
     <Menu closeOnSelect={true}>
       <MenuButton
@@ -46,7 +49,6 @@ const OrderByBtn = ({
         display={"flex"}
         alignItems={"center"}
         borderColor={"#A0AEC0"}
-        // w={120}
         size={{ base: "xs", sm: "sm", lg: "md" }}
       >
         <Text
@@ -61,11 +63,11 @@ const OrderByBtn = ({
       </MenuButton>
       <MenuList minWidth="240px">
         <MenuOptionGroup
-          defaultValue="asc"
+          defaultValue={selectedOptn}
           title={btnName.toLowerCase()}
           type="radio"
           value={selectedOptn}
-          onChange={(e) => handleOnChange(e)}
+          onChange={handleOnChange}
         >
           {options.map((optn, idx) => (
             <MenuItemOption key={idx} value={optn.split(" ")[0].toLowerCase()}>

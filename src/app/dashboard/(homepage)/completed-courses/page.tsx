@@ -4,6 +4,12 @@ import React from "react";
 import coursesList from "../../../../../public/courses";
 import { sxScrollbar } from "../../../../../public/scrollbarStyle";
 import WithRoleCheck from "@/app/hoc/WithRoleCheck";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Learnopia | Completed Courses",
+  description: "Learnopia | Completed Courses",
+};
 
 const main = {
   width: "100%",

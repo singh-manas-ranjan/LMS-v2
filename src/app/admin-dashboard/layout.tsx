@@ -4,6 +4,14 @@ import Sidebar from "../ui/dashboard/sidebar/Sidebar";
 import Navbar from "../ui/navbar/Navbar";
 import adminSidebarLinks from "../../../public/adminSidebarLinks";
 import { currentUser } from "@/lib/auth-session";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  keywords:
+    "Learnopia, Learnopia.com, Learnopia.org, Courses, Education, E-learning, Online Courses, Free Courses, Free Education, Free E-Learning, Online Education, Online E-Learning, MOOCs, Massive Open Online Courses, Open Education, Open E-Learning",
+  robots: "follow, index",
+  generator: "Learnopia",
+};
 
 interface Props {
   children: ReactNode;

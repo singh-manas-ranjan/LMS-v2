@@ -11,6 +11,8 @@ function getApiUrl(callbackUrl: string): string {
     case "/instructor-dashboard":
       return "http://localhost:3131/api/v1/instructors/login";
     case "/admin-dashboard":
+    case "/admin":
+    case "/home":
       return "http://localhost:3131/api/v1/admin/login";
     default:
       throw new Error("Invalid callback URL");

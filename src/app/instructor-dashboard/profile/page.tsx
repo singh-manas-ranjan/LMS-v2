@@ -30,6 +30,12 @@ import { getUserInfoByEmail } from "@/actions/users/action";
 import { currentUser } from "@/lib/auth-session";
 import InstructorProfileEditForm from "@/app/ui/instructorDashboard/InstructorProfileEditForm";
 import WithRoleCheck from "@/app/hoc/WithRoleCheck";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Learnopia | Profile",
+  description: "Learnopia | Profile",
+};
 
 const main = {
   width: "100%",

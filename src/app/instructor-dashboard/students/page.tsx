@@ -1,6 +1,12 @@
 import WithRoleCheck from "@/app/hoc/WithRoleCheck";
 import { Box, Heading } from "@chakra-ui/react";
+import { Metadata } from "next";
 import React from "react";
+
+export const metadata: Metadata = {
+  title: "Learnopia | Students",
+  description: "Learnopia | Students",
+};
 
 const main = {
   width: "100%",

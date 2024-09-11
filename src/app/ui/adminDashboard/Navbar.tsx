@@ -117,10 +117,7 @@ const Navbar = ({ userId }: { userId: string }) => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3131/api/v1/admin/access/${role}/${userId}`,
-          {
-            withCredentials: true,
-          }
+          `http://localhost:3131/api/v1/admin/access/${role}/${userId}`
         );
         setUser(response.data.body);
       } catch (error) {

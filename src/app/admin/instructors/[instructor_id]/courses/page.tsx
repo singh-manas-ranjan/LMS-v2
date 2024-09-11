@@ -1,21 +1,18 @@
-"use client";
 import {
   Box,
   CardHeader,
   Heading,
-  SimpleGrid,
   Image,
   Text,
   CardBody,
-  CardFooter,
   Grid,
   Card,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { sxScrollbar } from "../../../../../../public/scrollbarStyle";
 import { TUser } from "@/app/ui/navbar/Navbar";
 import axios from "axios";
-import WithRoleCheck from "@/app/hoc/WithRoleCheck";
+import withRoleCheck from "@/app/hoc/WithRoleCheck";
 
 const main = {
   width: "100%",
@@ -34,26 +31,13 @@ const textStyle = {
   fontSize: { base: "sm" },
 };
 
-const MyPublishedCourses = ({ params: { instructor_id } }: Props) => {
-  const [instructor, setInstructor] = useState<TUser>({} as TUser);
+const MyPublishedCourses = async ({ params: { instructor_id } }: Props) => {
+  const instructor: TUser = await axios
+    .get(
+      `http://localhost:3131/api/v1/admin/access/instructors/${instructor_id}`
+    )
+    .then((res) => res.data.body);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:3131/api/v1/admin/access/instructors/${instructor_id}`,
-          {
-            withCredentials: true,
-          }
-        );
-        setInstructor(response.data.body);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
-    fetchUserData();
-  }, [instructor_id]);
   const courses = instructor?.publishedCourses;
   return (
     <Box as="main" sx={main} rowGap={5} overflow={"hidden"}>
@@ -123,4 +107,4 @@ const MyPublishedCourses = ({ params: { instructor_id } }: Props) => {
   );
 };
 
-export default WithRoleCheck(MyPublishedCourses, "admin");
+export default withRoleCheck(MyPublishedCourses, "admin");

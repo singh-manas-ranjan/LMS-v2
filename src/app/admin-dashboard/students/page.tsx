@@ -14,6 +14,12 @@ import { sxScrollbar } from "../../../../public/scrollbarStyle";
 import UsersList from "@/app/ui/adminDashboard/users/UsersList";
 import StudentFilterForm from "@/app/ui/adminDashboard/students/StudentFilterForm";
 import WithRoleCheck from "@/app/hoc/WithRoleCheck";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Learnopia | Students",
+  description: "Learnopia | Students",
+};
 
 const main = {
   width: "100%",
@@ -143,4 +149,4 @@ const AdminStudents = async () => {
   );
 };
 
-export default WithRoleCheck(AdminStudents, "student");
+export default WithRoleCheck(AdminStudents, "admin");

@@ -1,5 +1,12 @@
+import withRoleCheck from "@/app/hoc/WithRoleCheck";
 import { Box, Heading } from "@chakra-ui/react";
+import { Metadata } from "next";
 import React from "react";
+
+export const metadata: Metadata = {
+  title: "Learnopia | Profile",
+  description: "Learnopia | Profile",
+};
 
 const main = {
   width: "100%",
@@ -18,4 +25,4 @@ const AdminProfile = () => {
   );
 };
 
-export default AdminProfile;
+export default withRoleCheck(AdminProfile, "admin");

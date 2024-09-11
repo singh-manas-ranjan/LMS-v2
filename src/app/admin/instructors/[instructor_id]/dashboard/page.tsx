@@ -1,4 +1,3 @@
-"use client";
 import {
   Box,
   Flex,
@@ -15,17 +14,17 @@ import {
   WrapItem,
   Avatar,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import NextLink from "next/link";
 
 import BannerCarousel from "@/app/ui/bannerCarousel/BannerCarousel";
 import { popularTasks } from "@/app/ui/adminDashboard/overview/bottomCards/OverviewBottomCards";
-import axios from "axios";
-import { TUser } from "@/app/ui/navbar/Navbar";
 import studentRankings, {
   TStudentRankings,
 } from "../../../../../../public/rankingData";
-import WithRoleCheck from "@/app/hoc/WithRoleCheck";
+import { TUser } from "@/app/ui/navbar/Navbar";
+import axios from "axios";
+import withRoleCheck from "@/app/hoc/WithRoleCheck";
 
 const main = {
   width: "100%",
@@ -70,26 +69,14 @@ interface Props {
   params: { instructor_id: string };
 }
 
-const AdminInstructorDashboard = ({ params: { instructor_id } }: Props) => {
-  const [instructor, setInstructor] = useState<TUser>({} as TUser);
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:3131/api/v1/admin/access/instructors/${instructor_id}`,
-          {
-            withCredentials: true,
-          }
-        );
-        setInstructor(response.data.body);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
-    fetchUserData();
-  }, [instructor_id]);
+const AdminInstructorDashboard = async ({
+  params: { instructor_id },
+}: Props) => {
+  const instructor: TUser = await axios
+    .get(
+      `http://localhost:3131/api/v1/admin/access/instructors/${instructor_id}`
+    )
+    .then((res) => res.data.body);
 
   return (
     <Box as="main" sx={main}>
@@ -437,4 +424,4 @@ const AdminInstructorDashboard = ({ params: { instructor_id } }: Props) => {
   );
 };
 
-export default WithRoleCheck(AdminInstructorDashboard, "admin");
+export default withRoleCheck(AdminInstructorDashboard, "admin");

@@ -5,6 +5,12 @@ import DetailedProfileInfo from "@/app/ui/dashboard/profile/detailedProfileInfo/
 import { sxScrollbar } from "../../../../../public/scrollbarStyle";
 import UploadProfilePicBtn from "@/app/ui/dashboard/profile/UploadProfilePicBtn";
 import WithRoleCheck from "@/app/hoc/WithRoleCheck";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Learnopia | Profile",
+  description: "Learnopia | Profile",
+};
 
 const main = {
   width: "100%",

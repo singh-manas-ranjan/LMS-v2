@@ -121,7 +121,7 @@ export const AccountType = () => {
           bgPosition={"center"}
           rounded={"50%"}
         />
-        <Link href={"/admin-dashboard"} style={{ marginTop: "15px" }}>
+        <Link href={"/home"} style={{ marginTop: "15px" }}>
           <Text
             fontSize={{ base: "md", sm: "x-large" }}
             textAlign={"center"}

@@ -3,6 +3,12 @@ import React, { Suspense } from "react";
 import { sxScrollbar } from "../../../../public/scrollbarStyle";
 import UsersList from "@/app/ui/adminDashboard/users/UsersList";
 import FilterUser from "@/app/ui/adminDashboard/instructors/FilterUser";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Learnopia | Instructors",
+  description: "Learnopia | Instructors",
+};
 
 const main = {
   width: "100%",
