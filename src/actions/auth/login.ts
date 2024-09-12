@@ -13,10 +13,10 @@ export const login = async (
   if (!validatedFields.success) {
     return { error: "Invalid fields!" };
   }
-  const { username, password } = validatedFields.data;
+  const { email, password } = validatedFields.data;
   try {
     await signIn("credentials", {
-      username,
+      email,
       password,
       callbackUrl,
       redirectTo: callbackUrl || "/auth/account-type",

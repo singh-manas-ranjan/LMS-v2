@@ -30,6 +30,7 @@ import {
   Phone,
   User,
 } from "lucide-react";
+import { signUp } from "@/actions/auth/register";
 
 export const RegisterForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -44,9 +45,7 @@ export const RegisterForm = () => {
       username: "",
       email: "",
       password: "",
-      confirmPassword: "",
       phone: "",
-      accountType: "",
     },
   });
 
@@ -61,7 +60,15 @@ export const RegisterForm = () => {
     setError("");
     setSuccess("");
     startTransition(() => {
-      console.log(values);
+      signUp(values).then((data) => {
+        if (data?.error) {
+          form.reset();
+          setError(data?.error);
+        } else {
+          form.reset();
+          setSuccess(data?.success);
+        }
+      });
     });
   };
 
@@ -160,6 +167,35 @@ export const RegisterForm = () => {
                 {errors.email?.message}
               </FormErrorMessage>
             </FormControl>
+            {/* ====== Phone ====== */}
+            <FormControl isInvalid={!!errors.phone}>
+              <InputGroup size={{ base: "sm" }}>
+                <InputLeftElement>
+                  <Phone size={15} color="grey" />
+                </InputLeftElement>
+                <Input
+                  id="phone"
+                  type="tel"
+                  placeholder="Phone"
+                  {...register("phone")}
+                  size={{ base: "sm" }}
+                  fontSize={{ base: "xs", md: "sm" }}
+                  bg={"white"}
+                  rounded={"4"}
+                />
+              </InputGroup>
+              <FormErrorMessage fontSize={".8rem"}>
+                {errors.phone?.message}
+              </FormErrorMessage>
+            </FormControl>
+          </HStack>
+
+          <HStack
+            flexDir={{ base: "column", sm: "row" }}
+            spacing={4}
+            alignItems={"flex-start"}
+            justifyContent={"flex-start"}
+          >
             {/* ====== Username ====== */}
             <FormControl isInvalid={!!errors.username}>
               <InputGroup size={{ base: "sm" }}>
@@ -181,14 +217,6 @@ export const RegisterForm = () => {
                 {errors.username?.message}
               </FormErrorMessage>
             </FormControl>
-          </HStack>
-
-          <HStack
-            flexDir={{ base: "column", sm: "row" }}
-            spacing={4}
-            alignItems={"flex-start"}
-            justifyContent={"flex-start"}
-          >
             {/* ====== Password ====== */}
             <FormControl isInvalid={!!errors.password}>
               <InputGroup size={{ base: "sm" }}>
@@ -211,7 +239,7 @@ export const RegisterForm = () => {
               </FormErrorMessage>
             </FormControl>
             {/* ====== Confirm-Password ====== */}
-            <FormControl isInvalid={!!errors.confirmPassword}>
+            {/* <FormControl isInvalid={!!errors.confirmPassword}>
               <InputGroup size={{ base: "sm" }}>
                 <InputLeftElement>
                   <LockIcon size={15} color="grey" />
@@ -230,7 +258,7 @@ export const RegisterForm = () => {
               <FormErrorMessage fontSize={".8rem"}>
                 {errors.confirmPassword?.message}
               </FormErrorMessage>
-            </FormControl>
+            </FormControl> */}
           </HStack>
           <HStack
             flexDir={{ base: "column", sm: "row" }}
@@ -238,29 +266,8 @@ export const RegisterForm = () => {
             alignItems={"flex-start"}
             justifyContent={"flex-start"}
           >
-            {/* ====== Phone ====== */}
-            <FormControl isInvalid={!!errors.phone}>
-              <InputGroup size={{ base: "sm" }}>
-                <InputLeftElement>
-                  <Phone size={15} color="grey" />
-                </InputLeftElement>
-                <Input
-                  id="phone"
-                  type="tel"
-                  placeholder="Phone"
-                  {...register("phone")}
-                  size={{ base: "sm" }}
-                  fontSize={{ base: "xs", md: "sm" }}
-                  bg={"white"}
-                  rounded={"4"}
-                />
-              </InputGroup>
-              <FormErrorMessage fontSize={".8rem"}>
-                {errors.phone?.message}
-              </FormErrorMessage>
-            </FormControl>
             {/* ====== Acc-Type ====== */}
-            <FormControl isInvalid={!!errors.accountType}>
+            {/* <FormControl isInvalid={!!errors.accountType}>
               <Select
                 {...form.register("accountType")}
                 size={{ base: "sm" }}
@@ -275,7 +282,7 @@ export const RegisterForm = () => {
               <FormErrorMessage fontSize={".8rem"}>
                 {errors.accountType?.message}
               </FormErrorMessage>
-            </FormControl>
+            </FormControl> */}
           </HStack>
 
           <FormSuccess message={success} />

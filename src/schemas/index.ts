@@ -13,27 +13,26 @@ const passwordValidation = z
   });
 
 export const LoginSchema = z.object({
-  username: z.string().min(1, { message: "Username is required" }),
+  email: z.string().min(1, { message: "Email is required" }),
   password: z.string().min(1, { message: "Password is required." }),
 });
 
-export const RegisterSchema = z
-  .object({
-    firstName: z.string().min(1, { message: "First name is required" }),
-    lastName: z.string().min(1, { message: "Last name is required" }),
-    username: z.string().min(1, { message: "Username is required" }),
-    email: z.string().email({
-      message: "Email is required",
-    }),
-    password: passwordValidation,
-    confirmPassword: z.string(),
-    phone: z.string().min(10, { message: "Phone number is required" }),
-    accountType: z.string().min(1, { message: "Account type is required" }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
+export const RegisterSchema = z.object({
+  firstName: z.string().min(1, { message: "First name is required" }),
+  lastName: z.string().min(1, { message: "Last name is required" }),
+  username: z.string().min(1, { message: "Username is required" }),
+  email: z.string().email({
+    message: "Email is required",
+  }),
+  password: passwordValidation,
+  // confirmPassword: z.string(),
+  phone: z.string().min(10, { message: "Phone number is required" }),
+  // accountType: z.string().min(1, { message: "Account type is required" }),
+});
+// .refine((data) => data.password === data.confirmPassword, {
+//   message: "Passwords do not match",
+//   path: ["confirmPassword"],
+// });
 
 export const ResetSchema = z.object({
   email: z.string().email({

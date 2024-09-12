@@ -2,6 +2,7 @@ import NextAuth, { type DefaultSession } from "next-auth";
 import authConfig from "./auth.config";
 import { getUserInfoByEmail } from "./actions/users/action";
 import { TAddress } from "./actions/instructor/action";
+import { signUpAuth } from "./actions/auth/register";
 
 export enum UserRole {
   STUDENT = "student",
@@ -35,12 +36,29 @@ export const {
     signIn: "/auth/login",
   },
   events: {
-    async linkAccount({ user }) {
-      // handle linking accounts (if needed)
-    },
+    async linkAccount({ user }) {},
   },
   callbacks: {
     async signIn({ user, account }) {
+      if (!user) return false;
+
+      if (account?.provider !== "credentials" && user) {
+        const existingUser = await getUserInfoByEmail(user?.email ?? "");
+
+        if (!existingUser) {
+          const names: string[] = user?.name?.split(" ") ?? [];
+          await signUpAuth({
+            email: user?.email as string,
+            firstName: user?.name?.split(" ")[0] as string,
+            lastName: user?.name?.split(" ")[names.length - 1] as string,
+            avatar: user?.image as string,
+            username: user?.email?.substring(
+              0,
+              user?.email?.indexOf("@")
+            ) as string,
+          });
+        }
+      }
       return true;
     },
     async jwt({ token }) {
@@ -50,6 +68,7 @@ export const {
 
       if (!existingUser) return token;
 
+      token.sub = existingUser.id;
       token.role = existingUser.role;
       token.firstName = existingUser.firstName;
       token.lastName = existingUser.lastName;
@@ -82,6 +101,5 @@ export const {
       return session;
     },
   },
-  session: { strategy: "jwt" },
   ...authConfig,
 });

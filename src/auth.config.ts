@@ -20,6 +20,9 @@ function getApiUrl(callbackUrl: string): string {
 }
 
 export default {
+  session: {
+    strategy: "jwt",
+  },
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID,
@@ -39,7 +42,7 @@ export default {
             return null;
           }
 
-          const { username, password } = validatedFields.data;
+          const { email, password } = validatedFields.data;
 
           const callbackUrl = credentials.callbackUrl as string;
 
@@ -50,7 +53,7 @@ export default {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ username, password }),
+            body: JSON.stringify({ email, password }),
           });
 
           if (!response.ok) {

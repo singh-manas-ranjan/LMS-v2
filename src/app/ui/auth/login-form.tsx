@@ -23,6 +23,9 @@ import { FormError } from "./form-error";
 import { LockKeyholeIcon, User } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { login } from "@/actions/auth/login";
+import { FcGoogle } from "react-icons/fc";
+import { FaGithub } from "react-icons/fa";
+import { signIn } from "next-auth/react";
 
 export const LoginForm = () => {
   const searchParams = useSearchParams();
@@ -35,7 +38,7 @@ export const LoginForm = () => {
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
-      username: "",
+      email: "",
       password: "",
     },
   });
@@ -62,6 +65,12 @@ export const LoginForm = () => {
     });
   };
 
+  const onClick = (provider: "google" | "github") => {
+    signIn(provider, {
+      callbackUrl: "/dashboard",
+    });
+  };
+
   return (
     <Box
       w={{ base: "300px", sm: "350px" }}
@@ -83,15 +92,15 @@ export const LoginForm = () => {
       </Text>
       <form onSubmit={handleSubmit(onSubmit)}>
         <VStack spacing={4} align="stretch">
-          <FormControl isInvalid={!!errors.username}>
+          <FormControl isInvalid={!!errors.email}>
             <InputGroup size={{ base: "sm", lg: "md" }}>
               <InputLeftElement>
                 <User size={15} color="grey" />
               </InputLeftElement>
               <Input
-                type="text"
-                placeholder="Username"
-                {...form.register("username")}
+                type="email"
+                placeholder="Email"
+                {...form.register("email")}
                 size={{ base: "sm", lg: "md" }}
                 fontSize={{ base: ".8rem", lg: "md" }}
                 bg={"white"}
@@ -100,7 +109,7 @@ export const LoginForm = () => {
               />
             </InputGroup>
             <FormErrorMessage fontSize={".8rem"}>
-              {errors.username?.message}
+              {errors.email?.message}
             </FormErrorMessage>
           </FormControl>
           <FormControl isInvalid={!!errors.password}>
@@ -160,6 +169,31 @@ export const LoginForm = () => {
               Don&apos;t have an account?
             </Link>
           </Box>
+          {callbackUrl?.startsWith("/dash") && (
+            <Box
+              w={"100%"}
+              display={"flex"}
+              justifyContent={"space-between"}
+              columnGap={3}
+            >
+              <Button
+                flex={1}
+                size={"sm"}
+                rounded={4}
+                onClick={() => onClick("google")}
+              >
+                <FcGoogle size={20} />
+              </Button>
+              <Button
+                flex={1}
+                size={"sm"}
+                rounded={4}
+                onClick={() => onClick("github")}
+              >
+                <FaGithub size={20} />
+              </Button>
+            </Box>
+          )}
         </VStack>
       </form>
     </Box>

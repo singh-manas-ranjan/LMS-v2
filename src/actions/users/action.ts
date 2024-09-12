@@ -33,7 +33,7 @@ const getUserInfoByEmail = async (email: string) => {
       .post(`http://localhost:3131/api/v1/users/info`, { email })
       .then((res) => res.data.body);
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     return null;
   }
 };
