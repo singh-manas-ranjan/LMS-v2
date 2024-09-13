@@ -67,8 +67,18 @@ const PersonalInfo = ({ userData }: Props) => {
               }}
             >
               {typeof value === "object" && value !== null
-                ? `${value.addressLine1}, ${value.addressLine2}, ${value.state}, ${value.country}`
-                : value}
+                ? value.addressLine1 ||
+                  value.addressLine2 ||
+                  value.state ||
+                  value.country
+                  ? `${value.addressLine1 || ""}, ${
+                      value.addressLine2 || ""
+                    }, ${value.state || ""}, ${value.country || ""}`.replace(
+                      /(^, )|(, $)/g,
+                      ""
+                    )
+                  : "-NA-"
+                : value || "-NA-"}
             </Text>
           </Box>
         </Box>

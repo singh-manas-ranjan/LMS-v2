@@ -6,6 +6,7 @@ import { sxScrollbar } from "../../../../../public/scrollbarStyle";
 import UploadProfilePicBtn from "@/app/ui/dashboard/profile/UploadProfilePicBtn";
 import WithRoleCheck from "@/app/hoc/WithRoleCheck";
 import { Metadata } from "next";
+import { currentUser } from "@/lib/auth-session";
 
 export const metadata: Metadata = {
   title: "Learnopia | Profile",
@@ -22,7 +23,8 @@ const main = {
   padding: "1rem",
   overflow: "hidden",
 };
-const Profile = () => {
+const Profile = async () => {
+  const user = await currentUser();
   return (
     <Box as="main" sx={main}>
       <Box

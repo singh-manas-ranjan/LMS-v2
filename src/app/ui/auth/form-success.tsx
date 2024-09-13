@@ -18,6 +18,7 @@ export const FormSuccess = ({ message }: Props) => {
       bg={"green.100"}
       p={1}
       borderRadius={"sm"}
+      w={"100%"}
     >
       <CheckCircledIcon style={{ width: "1rem", height: "1rem" }} />
       <Text>{message}</Text>

@@ -60,9 +60,11 @@ const DetailedProfileInfo = async () => {
         <Tab p={3} fontSize={{ base: "sm" }}>
           Profile
         </Tab>
-        <Tab p={3} fontSize={{ base: "sm" }}>
-          Password
-        </Tab>
+        {!user?.isOAuth && (
+          <Tab p={3} fontSize={{ base: "sm" }}>
+            Password
+          </Tab>
+        )}
         <Tab p={3} fontSize={{ base: "sm" }}>
           Social Links
         </Tab>

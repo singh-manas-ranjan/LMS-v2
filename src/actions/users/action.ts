@@ -38,4 +38,20 @@ const getUserInfoByEmail = async (email: string) => {
   }
 };
 
-export { fetchAllUsers, getUserByEmail, getUserInfoByEmail };
+const getAccountByUserId = async (userId: string) => {
+  try {
+    return await axios
+      .post(`http://localhost:3131/api/v1/users/accounts/userId`, { userId })
+      .then((res) => res.data.body);
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+export {
+  fetchAllUsers,
+  getUserByEmail,
+  getUserInfoByEmail,
+  getAccountByUserId,
+};

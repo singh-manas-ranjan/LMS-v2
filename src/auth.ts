@@ -1,8 +1,8 @@
 import NextAuth, { type DefaultSession } from "next-auth";
 import authConfig from "./auth.config";
-import { getUserInfoByEmail } from "./actions/users/action";
+import { getAccountByUserId, getUserInfoByEmail } from "./actions/users/action";
 import { TAddress } from "./actions/instructor/action";
-import { signUpAuth } from "./actions/auth/register";
+import { createAuthAccount, signUpAuth } from "./actions/auth/register";
 
 export enum UserRole {
   STUDENT = "student",
@@ -13,6 +13,7 @@ export enum UserRole {
 declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
+      isOAuth: boolean;
       role: UserRole;
       phone: string;
       firstName: string;
@@ -47,7 +48,7 @@ export const {
 
         if (!existingUser) {
           const names: string[] = user?.name?.split(" ") ?? [];
-          await signUpAuth({
+          const userData = await signUpAuth({
             email: user?.email as string,
             firstName: user?.name?.split(" ")[0] as string,
             lastName: user?.name?.split(" ")[names.length - 1] as string,
@@ -57,22 +58,39 @@ export const {
               user?.email?.indexOf("@")
             ) as string,
           });
+          await createAuthAccount({
+            userId: userData.user?._id as string,
+            type: account?.type as string,
+            provider: account?.provider as string,
+            providerAccountId: account?.providerAccountId as string,
+            refresh_token: account?.refresh_token as string,
+            access_token: account?.access_token as string,
+            expires_at: account?.expires_at as number,
+            token_type: account?.token_type as string,
+            scope: account?.scope as string,
+            id_token: account?.id_token as string,
+            session_state: account?.session_state as string,
+          });
         }
       }
       return true;
     },
-    async jwt({ token }) {
+    async jwt({ token, account }) {
       if (!token.sub) return token;
 
       const existingUser = await getUserInfoByEmail(token?.email ?? "");
 
       if (!existingUser) return token;
 
+      const userId = await getAccountByUserId(existingUser.id);
+
+      token.isOAuth = !!userId;
       token.sub = existingUser.id;
       token.role = existingUser.role;
       token.firstName = existingUser.firstName;
       token.lastName = existingUser.lastName;
       token.avatar = existingUser.avatar;
+
       token.address = existingUser.address;
       token.gender = existingUser.gender;
       token.aboutMe = existingUser.aboutMe;
@@ -85,6 +103,7 @@ export const {
         session.user = {
           ...session.user,
           id: token.sub as string,
+          isOAuth: token.isOAuth as boolean,
           role: token.role as UserRole,
           firstName: token.firstName as string,
           lastName: token.lastName as string,

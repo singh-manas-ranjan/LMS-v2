@@ -18,6 +18,7 @@ export const FormError = ({ message }: Props) => {
       bg={"red.100"}
       p={1}
       borderRadius={"sm"}
+      w={"100%"}
     >
       <ExclamationTriangleIcon style={{ width: "1rem", height: "1rem" }} />
       <Text>{message}</Text>
