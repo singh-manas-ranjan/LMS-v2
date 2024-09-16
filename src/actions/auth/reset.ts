@@ -2,11 +2,13 @@
 
 import * as z from "zod";
 import { ResetSchema } from "@/schemas";
-import { sendPasswordResetEmailUsingNodeMailer } from "@/lib/mail";
+import { sendEmail } from "@/lib/mail";
 import { generatePasswordResetToken } from "@/lib/tokens";
 import axios from "axios";
 import { getUserByEmail } from "@/actions/users/action";
 import { TUser } from "@/app/ui/navbar/Navbar";
+
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 export type TPasswordResetToken = {
   id?: string;
@@ -79,12 +81,12 @@ export const reset = async (values: z.infer<typeof ResetSchema>) => {
 
   const passwordResetToken = await generatePasswordResetToken(email);
   //   Send verification email using nodemailer
-  await sendPasswordResetEmailUsingNodeMailer(
-    `${existingUser.firstName} ${existingUser.lastName}`,
-    passwordResetToken?.email,
-    passwordResetToken?.token,
-    values.accountType
-  );
+  await sendEmail({
+    name: `${existingUser.firstName} ${existingUser.lastName}`,
+    email: passwordResetToken?.email,
+    subject: "Reset Password",
+    content: `<p>Click on the following link to reset your password:</p><p><a href="${baseUrl}/auth/new-password/?acc-type=${values.accountType}&token=${passwordResetToken?.token}">Reset Password</a></p>`,
+  });
 
   return { success: "Reset email sent!" };
 };

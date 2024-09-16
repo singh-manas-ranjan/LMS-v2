@@ -362,11 +362,11 @@ const ParticularCourseLayout = async ({ params, children }: Props) => {
                       <AccordionPanel pb={4}>
                         {courseDetails.chapterNames.map((lecture, idx) => (
                           <Link
-                            key={idx}
                             href={`?${new URLSearchParams({
                               section: String(index + 1),
                               lecture: String(idx + 1),
                             })}`}
+                            key={idx}
                           >
                             <AccordionButton display={"flex"} columnGap={3}>
                               <MdOndemandVideo size={25} />

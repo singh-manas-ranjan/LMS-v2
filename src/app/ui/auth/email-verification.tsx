@@ -61,7 +61,7 @@ export const EmailVerificationForm = () => {
       </Box>
       <Box w={"100%"} textAlign={"center"} mt={5}>
         <Link
-          href={"/auth/login"}
+          href={"/auth/login?callbackUrl=dashboard"}
           style={{ fontSize: ".7rem", color: "#0275d8" }}
         >
           Back To Login

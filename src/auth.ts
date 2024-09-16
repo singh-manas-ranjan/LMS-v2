@@ -3,6 +3,7 @@ import authConfig from "./auth.config";
 import { getAccountByUserId, getUserInfoByEmail } from "./actions/users/action";
 import { TAddress } from "./actions/instructor/action";
 import { createAuthAccount, signUpAuth } from "./actions/auth/register";
+import axios from "axios";
 
 export enum UserRole {
   STUDENT = "student",
@@ -37,54 +38,60 @@ export const {
     signIn: "/auth/login",
   },
   events: {
-    async linkAccount({ user }) {},
+    async linkAccount({ user }) {
+      await axios.patch(`http://localhost:3131/api/v1/students`, {
+        id: user?.id,
+        emailVerified: new Date(),
+      });
+    },
   },
   callbacks: {
     async signIn({ user, account }) {
       if (!user) return false;
 
       if (account?.provider !== "credentials" && user) {
-        const existingUser = await getUserInfoByEmail(user?.email ?? "");
+        const names: string[] = user?.name?.split(" ") ?? [];
+        const userData = await signUpAuth({
+          email: user?.email as string,
+          firstName: user?.name?.split(" ")[0] as string,
+          lastName: user?.name?.split(" ")[names.length - 1] as string,
+          avatar: user?.image as string,
+          username: user?.email?.substring(
+            0,
+            user?.email?.indexOf("@")
+          ) as string,
+        });
+        await createAuthAccount({
+          userId: userData.user?._id as string,
+          type: account?.type as string,
+          provider: account?.provider as string,
+          providerAccountId: account?.providerAccountId as string,
+          refresh_token: account?.refresh_token as string,
+          access_token: account?.access_token as string,
+          expires_at: account?.expires_at as number,
+          token_type: account?.token_type as string,
+          scope: account?.scope as string,
+          id_token: account?.id_token as string,
+          session_state: account?.session_state as string,
+        });
+      }
 
-        if (!existingUser) {
-          const names: string[] = user?.name?.split(" ") ?? [];
-          const userData = await signUpAuth({
-            email: user?.email as string,
-            firstName: user?.name?.split(" ")[0] as string,
-            lastName: user?.name?.split(" ")[names.length - 1] as string,
-            avatar: user?.image as string,
-            username: user?.email?.substring(
-              0,
-              user?.email?.indexOf("@")
-            ) as string,
-          });
-          await createAuthAccount({
-            userId: userData.user?._id as string,
-            type: account?.type as string,
-            provider: account?.provider as string,
-            providerAccountId: account?.providerAccountId as string,
-            refresh_token: account?.refresh_token as string,
-            access_token: account?.access_token as string,
-            expires_at: account?.expires_at as number,
-            token_type: account?.token_type as string,
-            scope: account?.scope as string,
-            id_token: account?.id_token as string,
-            session_state: account?.session_state as string,
-          });
-        }
+      const existingUser = await getUserInfoByEmail(user?.email as string);
+      if (!existingUser) {
+        return false;
       }
       return true;
     },
-    async jwt({ token, account }) {
+    async jwt({ token }) {
       if (!token.sub) return token;
 
       const existingUser = await getUserInfoByEmail(token?.email ?? "");
 
       if (!existingUser) return token;
 
-      const userId = await getAccountByUserId(existingUser.id);
+      const existingAccount = await getAccountByUserId(existingUser.id);
 
-      token.isOAuth = !!userId;
+      token.isOAuth = !!existingAccount;
       token.sub = existingUser.id;
       token.role = existingUser.role;
       token.firstName = existingUser.firstName;
