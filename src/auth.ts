@@ -3,7 +3,6 @@ import authConfig from "./auth.config";
 import { getAccountByUserId, getUserInfoByEmail } from "./actions/users/action";
 import { TAddress } from "./actions/instructor/action";
 import { createAuthAccount, signUpAuth } from "./actions/auth/register";
-import axios from "axios";
 
 export enum UserRole {
   STUDENT = "student",
@@ -37,14 +36,6 @@ export const {
   pages: {
     signIn: "/auth/login",
   },
-  events: {
-    async linkAccount({ user }) {
-      await axios.patch(`http://localhost:3131/api/v1/students`, {
-        id: user?.id,
-        emailVerified: new Date(),
-      });
-    },
-  },
   callbacks: {
     async signIn({ user, account }) {
       if (!user) return false;
@@ -60,6 +51,7 @@ export const {
             0,
             user?.email?.indexOf("@")
           ) as string,
+          emailVerified: new Date(),
         });
         await createAuthAccount({
           userId: userData.user?._id as string,

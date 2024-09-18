@@ -37,7 +37,7 @@ const Profile = async () => {
       >
         <Box flex={2} borderRadius={6} w={"100%"} h={"100%"}>
           <BriefProfileInfo>
-            <UploadProfilePicBtn user="STUDENTS" />
+            {!user?.isOAuth && <UploadProfilePicBtn user="STUDENTS" />}
           </BriefProfileInfo>
         </Box>
         <Box

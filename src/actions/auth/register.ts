@@ -14,6 +14,7 @@ export type TSignUpAuth = {
   lastName: string;
   avatar: string;
   username: string;
+  emailVerified: Date;
 };
 
 export type TAccountAuth = {

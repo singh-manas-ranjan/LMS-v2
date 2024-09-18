@@ -1,5 +1,6 @@
 import { currentUser } from "@/lib/auth-session";
-import { Box, Grid, Heading, Image } from "@chakra-ui/react";
+import { Box, Grid, Heading } from "@chakra-ui/react";
+import Image from "next/image";
 
 const getEducation = (education: string): string => {
   switch (education) {
@@ -54,7 +55,11 @@ const BriefProfileInfo = async ({
           <Image
             loading="lazy"
             alt="profile-pic"
-            src={user?.avatar ?? "/avatar.svg"}
+            src={
+              user?.isOAuth
+                ? user?.image ?? "/avatar.svg"
+                : user?.avatar ?? "/avatar.svg"
+            }
             width={100}
             height={100}
             style={{

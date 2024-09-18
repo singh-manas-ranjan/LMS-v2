@@ -3,7 +3,6 @@
 import {
   Box,
   Flex,
-  Image,
   Text,
   Menu,
   MenuButton,
@@ -33,6 +32,7 @@ import {
 import axios from "axios";
 import React from "react";
 import { TUser } from "../navbar/Navbar";
+import Image from "next/image";
 
 const profile = {
   display: "flex",

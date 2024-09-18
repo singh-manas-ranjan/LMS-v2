@@ -30,7 +30,7 @@ import { TCourse } from "../../../../public/courses";
 import { fetchAllCourses } from "@/actions/courses/actions";
 import { addCourses } from "@/lib/features/courses/coursesSlice";
 import { logout } from "@/actions/auth/logout";
-import { useSession } from "next-auth/react";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
 const nav = {
   bg: "#fff",
@@ -162,6 +162,7 @@ const Navbar = ({ navLinks, avatar, firstName }: Props) => {
   const [minWidth600] = useMediaQuery("(min-width: 600px)");
   const [maxWidth481] = useMediaQuery("(max-width: 481px)");
   const isMenuOpen = useAppSelector((state) => state.sideBar.isOpen);
+  const user = useCurrentUser();
 
   useEffect(() => {
     async function getAllCourses() {
@@ -226,7 +227,11 @@ const Navbar = ({ navLinks, avatar, firstName }: Props) => {
           >
             <Box sx={profile}>
               <Image
-                src={avatar ?? "/avatar.svg"}
+                src={
+                  user?.isOAuth
+                    ? user?.image ?? "/avatar.svg"
+                    : user?.avatar ?? "/avatar.svg"
+                }
                 width={30}
                 height={30}
                 style={{ borderRadius: "50%", boxShadow: "0 0 2px #000000" }}
