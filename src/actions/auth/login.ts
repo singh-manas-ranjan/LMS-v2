@@ -26,7 +26,7 @@ export const login = async (
     return { error: "Invalid Credentials!" };
   }
 
-  if (!existingUser.emailVerified) {
+  if (!existingUser.emailVerified && callbackUrl === "/dashboard") {
     const verificationToken = await generateEmailVerificationToken(
       existingUser.email
     );

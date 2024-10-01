@@ -85,11 +85,11 @@ export default function Page() {
               Sign In <LiaSignInAltSolid size={20} />
             </Button>
           </Link>
-          <Link href={"/auth/register"}>
+          {/* <Link href={"/auth/register"}>
             <Button sx={btnStyle} size={{ base: "sm", md: "md" }} rounded={4}>
               Sign Up <MdStart size={20} />
             </Button>
-          </Link>
+          </Link> */}
         </HStack>
       </VStack>
     </Box>

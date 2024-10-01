@@ -7,7 +7,6 @@ import {
   CardFooter,
   CardHeader,
   VStack,
-  Image,
   Text,
   Spinner,
 } from "@chakra-ui/react";
@@ -17,6 +16,7 @@ import { TUser } from "../../navbar/Navbar";
 import InstructorCard from "../../instructorDashboard/InstructorCard";
 import { useSearchParams } from "next/navigation";
 import { fetchAllUsers } from "@/actions/users/action";
+import Image from "next/image";
 
 const textStyle = {
   fontSize: { base: "xs", xl: "sm" },
@@ -111,8 +111,9 @@ const UsersList = ({ userRole }: Props) => {
             <Image
               src={student.avatar ?? "/avatar.svg"}
               alt={"profilePic"}
-              h={"100%"}
-              w={"100%"}
+              height={40}
+              width={40}
+              style={{ borderRadius: "50%" }}
             />
           </CardHeader>
           <CardBody
@@ -155,7 +156,7 @@ const UsersList = ({ userRole }: Props) => {
               >
                 {student.email}
               </Text>
-              <Text
+              {/* <Text
                 flex={1}
                 alignItems={"center"}
                 justifyContent={"center"}
@@ -163,7 +164,7 @@ const UsersList = ({ userRole }: Props) => {
                 display={{ base: "none", md: "flex" }}
               >
                 {student.phone}
-              </Text>
+              </Text> */}
               <Box flex={1} display={"flex"} justifyContent={"center"}>
                 <EnrollModal
                   courses={student.enrolledCourses ?? []}

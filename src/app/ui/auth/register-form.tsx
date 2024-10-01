@@ -4,7 +4,7 @@ import * as z from "zod";
 import { RegisterSchema } from "@/schemas";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import {
   Box,
   Text,
@@ -31,11 +31,24 @@ import {
   User,
 } from "lucide-react";
 import { signUp } from "@/actions/auth/register";
+import { TCourse } from "../../../../public/courses";
+import { fetchAllCourses } from "@/actions/courses/actions";
 
 export const RegisterForm = () => {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
+
+  const [allCourses, setAllCourses] = useState<TCourse[]>([]);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      const response = await fetchAllCourses();
+      setAllCourses(response);
+    };
+
+    fetchCourses();
+  }, []);
 
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
@@ -46,6 +59,7 @@ export const RegisterForm = () => {
       email: "",
       password: "",
       phone: "",
+      enrolledCourses: "",
     },
   });
 
@@ -267,22 +281,25 @@ export const RegisterForm = () => {
             justifyContent={"flex-start"}
           >
             {/* ====== Acc-Type ====== */}
-            {/* <FormControl isInvalid={!!errors.accountType}>
+            <FormControl isInvalid={!!errors.enrolledCourses}>
               <Select
-                {...form.register("accountType")}
+                {...form.register("enrolledCourses")}
                 size={{ base: "sm" }}
-                placeholder="Account Type"
+                placeholder="Select Course"
                 bg={"white"}
                 fontSize={{ base: "xs", md: "sm" }}
                 rounded={"4"}
               >
-                <option value="students">Student</option>
-                <option value="instructors">Instructor</option>
+                {allCourses.map((course, idx) => (
+                  <option key={idx} value={course._id}>
+                    {course.courseName}
+                  </option>
+                ))}
               </Select>
               <FormErrorMessage fontSize={".8rem"}>
-                {errors.accountType?.message}
+                {errors.enrolledCourses?.message}
               </FormErrorMessage>
-            </FormControl> */}
+            </FormControl>
           </HStack>
 
           <FormSuccess message={success} />

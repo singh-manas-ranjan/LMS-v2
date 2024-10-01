@@ -44,7 +44,6 @@ const getAccountByUserId = async (userId: string) => {
       .post(`http://localhost:3131/api/v1/users/accounts/userId`, { userId })
       .then((res) => res.data.body);
   } catch (error) {
-    console.error(error);
     return null;
   }
 };

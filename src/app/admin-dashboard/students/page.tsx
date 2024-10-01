@@ -96,7 +96,7 @@ const AdminStudents = async () => {
                 >
                   Email
                 </Text>
-                <Text
+                {/* <Text
                   flex={1}
                   justifyContent={"center"}
                   alignItems={"center"}
@@ -104,7 +104,7 @@ const AdminStudents = async () => {
                   display={{ base: "none", md: "flex" }}
                 >
                   Phone
-                </Text>
+                </Text> */}
                 <Text
                   flex={1}
                   display={"flex"}
