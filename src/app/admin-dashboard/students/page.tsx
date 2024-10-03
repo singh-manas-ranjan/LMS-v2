@@ -112,7 +112,7 @@ const AdminStudents = async () => {
                   alignItems={"center"}
                   fontSize={{ base: "xs", lg: "sm" }}
                 >
-                  Enrolled
+                  To Be Enrolled
                 </Text>
                 <Text
                   flex={1}
@@ -134,7 +134,7 @@ const AdminStudents = async () => {
                 alignItems={"center"}
                 paddingInline={1}
               >
-                Status
+                Enroll
               </Text>
             </CardFooter>
           </Card>

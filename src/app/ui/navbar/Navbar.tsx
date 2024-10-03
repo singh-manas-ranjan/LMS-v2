@@ -134,6 +134,7 @@ export type TUser = {
   education?: TEducation[];
   experience?: TExperience[];
   achievements?: TAchievement[];
+  toBeEnrolledTo?: string;
   enrolledCourses?: TCourse[];
   publishedCourses?: TCourse[];
 };

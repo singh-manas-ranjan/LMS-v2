@@ -59,7 +59,7 @@ export const RegisterForm = () => {
       email: "",
       password: "",
       phone: "",
-      enrolledCourses: "",
+      toBeEnrolledTo: "",
     },
   });
 
@@ -280,10 +280,10 @@ export const RegisterForm = () => {
             alignItems={"flex-start"}
             justifyContent={"flex-start"}
           >
-            {/* ====== Acc-Type ====== */}
-            <FormControl isInvalid={!!errors.enrolledCourses}>
+            {/* ====== Course to enroll ====== */}
+            <FormControl isInvalid={!!errors.toBeEnrolledTo}>
               <Select
-                {...form.register("enrolledCourses")}
+                {...form.register("toBeEnrolledTo")}
                 size={{ base: "sm" }}
                 placeholder="Select Course"
                 bg={"white"}
@@ -297,7 +297,7 @@ export const RegisterForm = () => {
                 ))}
               </Select>
               <FormErrorMessage fontSize={".8rem"}>
-                {errors.enrolledCourses?.message}
+                {errors.toBeEnrolledTo?.message}
               </FormErrorMessage>
             </FormControl>
           </HStack>

@@ -25,7 +25,7 @@ export const RegisterSchema = z.object({
     message: "Email is required",
   }),
   password: passwordValidation,
-  enrolledCourses: z.string().min(1, { message: "Course is required" }),
+  toBeEnrolledTo: z.string().min(1, { message: "Course is required" }),
   // confirmPassword: z.string(),
   phone: z.string().min(10, { message: "Phone number is required" }),
   // accountType: z.string().min(1, { message: "Account type is required" }),

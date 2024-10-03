@@ -21,6 +21,7 @@ import { TCourse } from "../../../../../public/courses";
 import { useAppSelector } from "@/lib/store";
 import { useForm } from "react-hook-form";
 import { setEnrolledCourses } from "@/actions/enrolledCourses/action";
+import { useRouter } from "next/navigation";
 
 type TEnrollCourse = {
   courseId: string;
@@ -33,6 +34,7 @@ type Props = {
 };
 
 function EnrollModal({ courses, studentId, studentFirstName }: Props) {
+  const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [enrolledCourses, setCourses] = useState<TCourse[]>(courses);
 
@@ -44,6 +46,7 @@ function EnrollModal({ courses, studentId, studentFirstName }: Props) {
 
   function handleUpdateEnrolledCourse(newCourse: TCourse) {
     setCourses((prevCourses) => [...prevCourses, newCourse]);
+    router.refresh();
   }
 
   const toast = useToast();

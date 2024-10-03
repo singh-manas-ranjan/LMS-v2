@@ -17,6 +17,7 @@ import InstructorCard from "../../instructorDashboard/InstructorCard";
 import { useSearchParams } from "next/navigation";
 import { fetchAllUsers } from "@/actions/users/action";
 import Image from "next/image";
+import { useAppSelector } from "@/lib/store";
 
 const textStyle = {
   fontSize: { base: "xs", xl: "sm" },
@@ -29,6 +30,9 @@ interface Props {
 const UsersList = ({ userRole }: Props) => {
   const searchParams = useSearchParams();
   const [users, setUsers] = useState<TUser[]>([]);
+  const AllAvailableCourses = useAppSelector(
+    (state) => state.allCourses.courses
+  );
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -166,11 +170,19 @@ const UsersList = ({ userRole }: Props) => {
                 {student.phone}
               </Text> */}
               <Box flex={1} display={"flex"} justifyContent={"center"}>
-                <EnrollModal
-                  courses={student.enrolledCourses ?? []}
-                  studentId={student._id ?? ""}
-                  studentFirstName={student.firstName}
-                />
+                <Text
+                  flex={1}
+                  alignItems={"center"}
+                  justifyContent={"center"}
+                  fontSize={{ base: "xs", lg: "sm" }}
+                  display={{ base: "none", md: "flex" }}
+                >
+                  {student.toBeEnrolledTo
+                    ? AllAvailableCourses.find(
+                        (course) => course._id === student.toBeEnrolledTo
+                      )?.courseName
+                    : "-"}
+                </Text>
               </Box>
               <Text
                 flex={1}
@@ -181,7 +193,7 @@ const UsersList = ({ userRole }: Props) => {
               >
                 {student.address?.addressLine1
                   ? `${student.address?.state}, ${student.address?.country}`
-                  : "-NA-"}
+                  : "-"}
               </Text>
             </Box>
           </CardBody>
@@ -192,13 +204,18 @@ const UsersList = ({ userRole }: Props) => {
             p={0}
             pr={5}
           >
-            <Badge
+            <EnrollModal
+              courses={student.enrolledCourses ?? []}
+              studentId={student._id ?? ""}
+              studentFirstName={student.firstName}
+            />
+            {/* <Badge
               colorScheme="green"
               variant={"outline"}
               fontSize={{ base: ".5rem", md: "xs" }}
             >
               Active
-            </Badge>
+            </Badge> */}
           </CardFooter>
         </Card>
       ))}
